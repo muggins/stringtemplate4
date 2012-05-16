@@ -288,8 +288,21 @@ static BOOL trackCreationEvents = NO;
                           name:(NSString *)aName
 {
     NSString *fullyQualifiedName = aName;
+    NSString *unQualifiedName;
     if ( [aName characterAtIndex:0] != '/' ) {
-        fullyQualifiedName = [NSString stringWithFormat:@"%@%@", enclosingInstance.impl.prefix, aName];
+    /*
+     * This fixes a problem in TestImports
+     * I couldn't find where the java source differed from mine
+     * Maybe at some point I will find where this should be handled
+     * and this code can be reverted
+     */
+        if ( [enclosingInstance.impl.prefix length] > 0 ) {
+            unQualifiedName = [Misc getFileName:aName];
+            fullyQualifiedName = [NSString stringWithFormat:@"%@%@", enclosingInstance.impl.prefix, unQualifiedName];
+        }
+        else {
+            fullyQualifiedName = [NSString stringWithFormat:@"%@%@", enclosingInstance.impl.prefix, aName];
+        }
     }
     if ( verbose ) NSLog( @"[self getEmbeddedInstanceOf:%@]\n", fullyQualifiedName);
     ST *st = [self getInstanceOf:fullyQualifiedName];
@@ -712,11 +725,11 @@ static BOOL trackCreationEvents = NO;
     else if ( isGroupDir ) {
 //      NSLog(@"try dir %@", fileUnderRoot);
         if ( [Misc urlExists:fileURL] ) {
-            g = [STGroupFile newSTGroupFile:fileUnderRoot encoding:encoding delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
+            g = [STGroupDir newSTGroupDir:fileUnderRoot encoding:encoding delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
             [g setListener:[self getListener]];
         }
         else {
-            g = [STGroupFile newSTGroupFile:aFileName delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
+            g = [STGroupDir newSTGroupDir:aFileName delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
             [g setListener:[self getListener]];
         }
     }

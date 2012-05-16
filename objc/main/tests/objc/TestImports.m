@@ -20,7 +20,7 @@
     NSString *b = @"b() ::= <<dir2 b>>\n";
     [self writeFile:dir2 fileName:@"a.st" content:a];
     [self writeFile:dir2 fileName:@"b.st" content:b];
-    STGroup *group = [STGroupDir newSTGroupDir:[NSString stringWithFormat:@"%@/g.stg", dir1]];
+    STGroup *group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/g.stg", dir1]];
     ST *st = [group getInstanceOf:@"b"]; // visible only if import worked
     NSString *expected = @"dir2 b";
     NSString *result = [st render];
@@ -224,7 +224,7 @@
     STGroup *group1 = [[STGroupDir newSTGroupDir:[NSString stringWithFormat:@"%@/x", dir]] autorelease];
     STGroup *group2 = [[STGroupDir newSTGroupDir:[NSString stringWithFormat:@"%@/y", dir]] autorelease];
     [group1 importTemplates:group2];
-    ST *st = [group1 getInstanceOf:@"subdir/a"];
+    ST *st = [group1 getInstanceOf:@"/subdir/a"];
     NSString *expected = @" x's subdir/b ";
     NSString *result = [st render];
     [self assertEquals:expected result:result];
@@ -308,16 +308,16 @@
     [group1 unload];
     st = [group2 getInstanceOf:@"a"];
     NSInteger newHashCode = [st hash];
-    NSString *expected = @"(originalHashCode2 == newHashCode2) = NO";
-    NSString *result = [NSString stringWithFormat:@"(originalHashCode2 == newHashCode2) = %@", ((originalHashCode2 == newHashCode) ? @"YES" : @"NO")];
+    NSString *expected = @"(originalHashCode2 == newHashCode) == NO";
+    NSString *result = [NSString stringWithFormat:@"(originalHashCode2 == newHashCode) == %@", ((originalHashCode2 == newHashCode) ? @"YES" : @"NO")];
     [self assertEquals:expected result:result];
     expected = @" dir1 b ";
     result = [st render];
     [self assertEquals:expected result:result];
     st = [group2 getInstanceOf:@"b"];
     NSInteger newHashCode2 = [st hash];
-    expected = @"(originalHashCode2 == newHashCode2) = YES";
-    result = [NSString stringWithFormat:@"(originalHashCode2 == newHashCode2) = %@", ((originalHashCode2 == newHashCode2) ? @"YES" : @"NO")];
+    expected = [NSString stringWithFormat:@"(originalHashCode2(%08x) == newHashCode2(%08x)) == NO", originalHashCode2, newHashCode2];
+    result = [NSString stringWithFormat:@"(originalHashCode2(%08x) == newHashCode2(%08x)) == %@", originalHashCode2, newHashCode2, ((originalHashCode2 == newHashCode2) ? @"YES" : @"NO")];
     [self assertEquals:expected result:result];
     expected = @"dir1 b";
     result = [st render];
