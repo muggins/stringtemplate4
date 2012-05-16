@@ -32,6 +32,7 @@
 #import "STException.h"
 #import "STParser.h"
 #import "STToken.h"
+#import "ErrorManager.h"
 
 #ifndef ANTLR3TokenTypeAlreadyDefined
 #define ANTLR3TokenTypeAlreadyDefined
@@ -186,7 +187,7 @@ delimiterStopChar:(unichar)aStopChar
         scanningInsideExpr = NO;
         subtemplateDepth = 0;
         tokens = [[AMutableArray arrayWithCapacity:16] retain];
-        errMgr = STGroup.DEFAULT_ERR_MGR;
+        errMgr = ErrorManager.DEFAULT_ERR_MGR;
         if ( errMgr ) [errMgr retain];
         input = anInput;
         if ( input ) [input retain];

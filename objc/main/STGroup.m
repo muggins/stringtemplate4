@@ -77,13 +77,6 @@
 {
     self=[super init];
     if ( self != nil ) {
-/*
-        dict = [[AMutableDictionary dictionaryWithCapacity:16] retain];
-        [dict setObject:[AggregateModelAdaptor newAggregateModelAdaptor] forKey:[NSString stringWithFormat:@"%02d%@", [dict count]+1, [Aggregate className]]];
-        [dict setObject:[DictModelAdaptor newDictModelAdaptor] forKey:[NSString stringWithFormat:@"%02d%@", [dict count]+1, [NSDictionary className]]];
-        [dict setObject:[STModelAdaptor newSTModelAdaptor] forKey:[NSString stringWithFormat:@"%02d%@", [dict count]+1, [ST className]]];
-        [dict setObject:[ObjectModelAdaptor newObjectModelAdaptor] forKey:[NSString stringWithFormat:@"%02d%@", [dict count]+1, [NSObject className]]];
- */
         dict = [[LinkedHashMap newLinkedHashMap:16] retain];
         [dict put:[NSObject className] value:[ObjectModelAdaptor newModelAdaptor]];
         [dict put:[ST className] value:[STModelAdaptor newModelAdaptor]];
@@ -140,8 +133,7 @@
  * Prevents duplicate group file loads and unnecessary file checks.
  */
 static STGroup      *aDefaultGroup = nil;
-static CompiledST   *NOT_FOUND_ST = nil;
-static ErrorManager *aDEFAULT_ERR_MGR = nil;
+// static CompiledST   *NOT_FOUND_ST = nil;
 /**
  * When we use key as a value in a dictionary, this is how we signify.
  */
@@ -169,13 +161,14 @@ static BOOL trackCreationEvents = NO;
 {
     aDefaultGroup = [[STGroup newSTGroup] retain];
 }
-
+/*
 + (CompiledST *) NOT_FOUND_ST
 {
     if (NOT_FOUND_ST == nil)
         NOT_FOUND_ST = [[CompiledST newCompiledST] retain];
     return NOT_FOUND_ST;
 }
+*/
 
 + (NSString *) DEFAULT_KEY
 {
@@ -198,13 +191,6 @@ static BOOL trackCreationEvents = NO;
 {
     if ( aDefaultGroup ) [aDefaultGroup release];
     aDefaultGroup = nil;
-}
-
-+ (ErrorManager *) DEFAULT_ERR_MGR
-{
-    if (aDEFAULT_ERR_MGR == nil)
-        aDEFAULT_ERR_MGR = [[ErrorManager newErrorManager] retain];
-    return aDEFAULT_ERR_MGR;
 }
 
 + (BOOL)trackCreationEvents
@@ -256,7 +242,7 @@ static BOOL trackCreationEvents = NO;
         adaptors = [[[STGroup_Anon1 newSTGroup_Anon1] getDict] retain];
         typeToAdaptorCache = [[LinkedHashMap newLinkedHashMap:16] retain];
         iterateAcrossValues = NO;
-        errMgr = STGroup.DEFAULT_ERR_MGR;
+        errMgr = ErrorManager.DEFAULT_ERR_MGR;
         [errMgr retain];
     }
     return self;
@@ -348,15 +334,13 @@ static BOOL trackCreationEvents = NO;
     return ([self lookupTemplate:aName] != nil);
 }
 
-
 /** Look up a fully-qualified name */
 - (CompiledST *) lookupTemplate:(NSString *)aName
 {
-    CompiledST *code;
     if ( [aName characterAtIndex:0] != '/') aName = [NSString stringWithFormat:@"/%@", aName];
     if ( verbose ) NSLog(@"[%@ lookupTemplate:%@]\n", [self className], aName);
-    code = [self rawGetTemplate:aName];
-    if ( code == STGroup.NOT_FOUND_ST ) {
+    CompiledST *code = [self rawGetTemplate:aName];
+    if ( code == CompiledST.NOT_FOUND_ST ) {
         if ( verbose ) NSLog(@"%@ previously seen as not found\n", aName);
         return nil;
     }
@@ -365,15 +349,17 @@ static BOOL trackCreationEvents = NO;
     if ( code == nil ) code = [self lookupImportedTemplate:aName];
     if ( code == nil ) {
         if ( verbose ) NSLog(@"%@ recorded not found\n", aName);
-        [templates put:aName value:NOT_FOUND_ST];
+        [templates put:aName value:CompiledST.NOT_FOUND_ST];
     }
     if ( verbose && code != nil ) NSLog(@"[%@ lookupTemplate:%@] found\n", [self className], aName);
     return code;
 }
 
-/** "unload" all templates and dictionaries but leave renderers, adaptors,
- *  and import relationships.  This essentially forces next getInstanceOf
- *  to reload templates.
+/** "unload" all templates, dictionaries and import relationships, but leave
+ *  renderers and adaptors.  This essentially forces next getInstanceOf
+ *  to reload templates. Call unload() on each group in the imports list
+ *  and remove every import from the imports list imported with
+ *  "clearOnUnload".
  */
 - (void) unload
 {
@@ -406,14 +392,9 @@ static BOOL trackCreationEvents = NO;
 
 - (CompiledST *) lookupImportedTemplate:(NSString *)aName
 {
-    if ( imports == nil )
+    if ( imports == nil || [imports count] == 0)
         return nil;
     STGroup *g;
-/*
-    ArrayIterator *it = [ArrayIterator newIterator:imports];
-    while ( [it hasNext] ) {
-        g = (STGroup *)[it nextObject];
- */
     for ( g in imports ) {
         if ( verbose ) NSLog(@"checking %@  for imported %@\n", [g getName], aName);
         CompiledST *code = [g lookupTemplate:aName];
@@ -428,8 +409,7 @@ static BOOL trackCreationEvents = NO;
 
 - (CompiledST *) rawGetTemplate:(NSString *)aName
 {
-    CompiledST *c;
-    c = [templates get:aName];
+    CompiledST *c = [templates get:aName];
     return c;
 }
 
@@ -472,11 +452,6 @@ static BOOL trackCreationEvents = NO;
 
     NSString *arg;
     for ( arg in args ) {
-/*
-    ArrayIterator *it = [ArrayIterator newIterator:args];
-    while ( [it hasNext] ) {
-        arg = (NSString *)[it nextObject];
- */
         [a addObject:[FormalArgument newFormalArgument:arg]];
     }
     return [self defineTemplate:aName
@@ -677,16 +652,18 @@ static BOOL trackCreationEvents = NO;
 {
     if (verbose) NSLog(@"[self importTemplates:%@]\n", fileNameToken.text);
     NSString *aFileName = fileNameToken.text;
+    // do nothing upon syntax error
     if ( aFileName == nil || [aFileName isEqualToString:@"<missing STRING>"] )
         return;
     aFileName = [Misc strip:aFileName n:1];
     
-    //System.out.println("import "+fileName);
+    //NSLog(@"import %@", aFileName);
     BOOL isGroupFile = [aFileName hasSuffix:@".stg"];
     BOOL isTemplateFile = [aFileName hasSuffix:@".st"];
     BOOL isGroupDir = !(isGroupFile || isTemplateFile);
     
     STGroup *g = nil;
+
     // it's a relative name; search path is working dir, g.stg's dir, CLASSPATH
     NSString *rootPath = [[self getRootDirURL] path];
     NSString *fileUnderRoot = [[self getRootDirURL] path];
@@ -695,11 +672,12 @@ static BOOL trackCreationEvents = NO;
     }
     fileUnderRoot = [fileUnderRoot stringByAppendingPathComponent:aFileName];
     fileUnderRoot = [fileUnderRoot stringByStandardizingPath];
+    NSURL *fileURL = [NSURL fileURLWithPath:fileUnderRoot];
+
     if ( isTemplateFile ) {
         g = [STGroup newSTGroup];
         [g setListener:[self getListener]];
         ANTLRInputStream *templateStream = nil;
-        NSURL *fileURL = [NSURL fileURLWithPath:fileUnderRoot];
         @try {
             if ( ![Misc urlExists:fileURL] ) {
                 IOException *ioe = [IOException newException:[NSString stringWithFormat:@"File Not Found %@\n", fileURL]];
@@ -708,7 +686,7 @@ static BOOL trackCreationEvents = NO;
             NSInputStream *is = [NSInputStream inputStreamWithURL:fileURL];
             templateStream = [ANTLRInputStream newANTLRInputStream:is];
             templateStream.name = aFileName;
-            CompiledST *code = [g loadTemplateFile:@"" fileName:aFileName stream:templateStream];
+            CompiledST *code = [g loadTemplateFile:@"/" fileName:aFileName stream:templateStream];
             if ( code==nil ) g = nil;
         }
         @catch (MalformedURLException *mfe) {
@@ -721,37 +699,25 @@ static BOOL trackCreationEvents = NO;
         }
     }
     else if ( isGroupFile ) {
-        @try {
-            //System.out.println("look for fileUnderRoot: "+fileUnderRoot);
+//      NSLog(@"look for fileUnderRoot: %@", fileUnderRoot);
+        if ( [Misc urlExists:fileURL] ) {
             g = [STGroupFile newSTGroupFile:fileUnderRoot encoding:encoding delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
             [g setListener:[self getListener]];
         }
-        @catch (IllegalArgumentException *iae) { // not relative to this group
-                                               //System.out.println("look in path: "+fileName);
-                                               // try in CLASSPATH
-            @try {
-                g = [STGroupFile newSTGroupFile:aFileName delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
-                [g setListener:[self getListener]];
-            }
-            @catch (IllegalArgumentException *iae2) {
-                g = nil;
-            }
+        else {
+            g = [STGroupFile newSTGroupFile:aFileName delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
+            [g setListener:[self getListener]];
         }
     }
     else if ( isGroupDir ) {
-        @try {
-            g = [STGroupDir newSTGroupDir:fileUnderRoot encoding:encoding delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
+//      NSLog(@"try dir %@", fileUnderRoot);
+        if ( [Misc urlExists:fileURL] ) {
+            g = [STGroupFile newSTGroupFile:fileUnderRoot encoding:encoding delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
             [g setListener:[self getListener]];
         }
-        @catch (IllegalArgumentException *iae) { // not relative to this group
-            // try in CLASSPATH
-            @try {
-                g = [STGroupDir newSTGroupDir:aFileName delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
-                [g setListener:[self getListener]];
-            }
-            @catch (IllegalArgumentException *iae2) {
-                g = nil;
-            }
+        else {
+            g = [STGroupFile newSTGroupFile:aFileName delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar];
+            [g setListener:[self getListener]];
         }
     }
     
@@ -825,7 +791,10 @@ static BOOL trackCreationEvents = NO;
     return [self loadTemplateFile:@"" fileName:aFileName stream:afs];
 }
 
-/** Load template stream into this group */
+/** Load template stream into this group. unqualifiedFileName is "a.st".
+ *  The prefix is path from group root to unqualifiedFileName like /subdir
+ *  if file is in /subdir/a.st
+ */
 - (CompiledST *) loadTemplateFile:(NSString *)prefix fileName:(NSString *)aFileName stream:(id<CharStream>)templateStream
 {
     GroupLexer *lexer = [GroupLexer newGroupLexerWithCharStream:templateStream];
@@ -889,6 +858,7 @@ static BOOL trackCreationEvents = NO;
     NSString *tmp;
     LHMKeyIterator *it = [adaptors newKeyIterator];
     while ( [it hasNext] ) {
+        // t works for attributeType if attributeType subclasses t or implements
         t = (NSString *)[it next];
         Class cls = objc_getClass([t UTF8String]);
         if ([attributeType isSubclassOfClass:cls]) {
@@ -932,6 +902,17 @@ static BOOL trackCreationEvents = NO;
     }
 }
 
+/** Get renderer for class T associated with this group.
+ *
+ *  For non-imported groups and object-to-render of class T, use renderer
+ *  (if any) registered for T.  For imports, any renderer
+ *  set on import group is ignored even when using an imported template.
+ *  You should set the renderer on the main group
+ *  you use (or all to be sure).  I look at import groups as
+ *  "helpers" that should give me templates and nothing else. If you
+ *  have multiple renderers for String, say, then just make uber combined
+ *  renderer with more specific format names.
+ */
 - (id<AttributeRenderer>) getAttributeRenderer:(id)attributeType
 {
     if ( renderers == nil )     return nil;
@@ -959,7 +940,6 @@ static BOOL trackCreationEvents = NO;
     return nil;
 }
 
-
 /** StringTemplate object factory; each group can have its own. */
 - (ST *) createStringTemplate:(CompiledST *)anImpl
 {
@@ -976,6 +956,9 @@ static BOOL trackCreationEvents = NO;
     return st;
 }
 
+/** differentiate so we can avoid having creation events for regions,
+ *  map operations, and other "new ST" events used during interp.
+ */
 - (ST *) createStringTemplateInternally:(CompiledST *)anImpl
 {
     ST *st = [self createStringTemplate:anImpl];
@@ -1042,7 +1025,7 @@ static BOOL trackCreationEvents = NO;
     while ( [it hasNext] ) {
         aName = (NSString *)[it next];
         CompiledST *c = [self rawGetTemplate:aName];
-        if (c.isAnonSubtemplate || c == STGroup.NOT_FOUND_ST)
+        if (c.isAnonSubtemplate || c == CompiledST.NOT_FOUND_ST)
             continue;
         aName = [aName lastPathComponent];
         [buf appendFormat:@"%@(", aName];
@@ -1067,18 +1050,11 @@ static BOOL trackCreationEvents = NO;
 {
     [self load];
     AMutableArray *result = [AMutableArray arrayWithCapacity:16];
-#ifdef DONTUSEYET
-    for (Map.Entry<String, CompiledST> e: templates.entrySet()) {
-        if (e.getValue() != NOT_FOUND_ST) {
-            [result addObject:[e.getKey());
-        }
-    }
-#endif
     LHMEntryIterator *it = [templates newEntryIterator];
     LHMEntry *e;
     while ( [it hasNext] ) {
         e = [it next];
-        if ( e.value != NOT_FOUND_ST ) {
+        if ( e.value != CompiledST.NOT_FOUND_ST ) {
             [result addObject:e.key];
         }
     }

@@ -143,8 +143,10 @@ static NSString *newline = @"\n";
     NSString *parent = [Misc getParent:name];
     NSString *prefix = parent;
     len = [parent length];
-    if ( [parent characterAtIndex:len-1] != '/' )
-        prefix = [NSString stringWithFormat:@"%@/", prefix];
+//    if ( [parent characterAtIndex:len-1] != '/' )
+//        prefix = [NSString stringWithFormat:@"%@/", prefix];
+    if ( ![parent hasSuffix:@"/"] )
+        prefix = [prefix stringByAppendingString:@"/"];
     return prefix;
 }
 

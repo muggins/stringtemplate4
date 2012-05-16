@@ -1,4 +1,5 @@
 #import "TestLexer.h"
+#import "ErrorManager.h"
 
 #define STAssertTrue GHAssertTrue
 
@@ -25,7 +26,7 @@
 
 - (void) checkTokens:(NSString *)template expected:(NSString *)expected delimiterStartChar:(unichar)delimiterStartChar delimiterStopChar:(unichar)delimiterStopChar
 {
-    STLexer *lexer = [STLexer newSTLexer:STGroup.DEFAULT_ERR_MGR
+    STLexer *lexer = [STLexer newSTLexer:ErrorManager.DEFAULT_ERR_MGR
                                    input:[ANTLRStringStream newANTLRStringStream:template]
                            templateToken:nil
                       delimiterStartChar:delimiterStartChar

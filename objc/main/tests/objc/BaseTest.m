@@ -139,6 +139,9 @@ NSString *const newline = @"\n"/* Misc.newline */;
     @try {
         NSFileManager *nfm = [[NSFileManager alloc] init];
         path = [dir stringByExpandingTildeInPath];
+        path = [path stringByAppendingPathComponent:fileName];
+        fileName = [path lastPathComponent];
+        path = [path stringByDeletingLastPathComponent];
         dirExists = [nfm fileExistsAtPath:path isDirectory:&isDirectory];
         if ( !dirExists ) {
             [nfm createDirectoryAtPath:(NSString *)path withIntermediateDirectories:YES attributes:nil error:&error];
@@ -147,7 +150,8 @@ NSString *const newline = @"\n"/* Misc.newline */;
         // NSFileHandle *f = [[File alloc] init:dir arg1:fileName];
         fh = [NSFileHandle fileHandleForWritingAtPath:path];
         if (fh == nil) {
-            NSData *data = [NSData dataWithContentsOfFile:content];
+//            NSData *data = [NSData dataWithContentsOfFile:content];
+            NSData *data = [content dataUsingEncoding:NSASCIIStringEncoding];
             if ([nfm createFileAtPath:path contents:data attributes:nil]) {
                 fh = [NSFileHandle fileHandleForWritingAtPath:path];
             }
@@ -182,7 +186,7 @@ NSString *const newline = @"\n"/* Misc.newline */;
 
 - (void) checkTokens:(NSString *)template expected:(NSString *)expected delimiterStartChar:(unichar)delimiterStartChar delimiterStopChar:(unichar)delimiterStopChar
 {
-    STLexer *lexer = [[STLexer newSTLexer:STGroup.DEFAULT_ERR_MGR input:[ANTLRStringStream newANTLRStringStream:template] templateToken:nil delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar] retain];
+    STLexer *lexer = [[STLexer newSTLexer:ErrorManager.DEFAULT_ERR_MGR input:[ANTLRStringStream newANTLRStringStream:template] templateToken:nil delimiterStartChar:delimiterStartChar delimiterStopChar:delimiterStopChar] retain];
     CommonTokenStream *tokens = [[CommonTokenStream newCommonTokenStreamWithTokenSource:lexer] retain];
     NSMutableString *buf = [[NSMutableString stringWithCapacity:30] retain];
     [buf appendString:@"["];

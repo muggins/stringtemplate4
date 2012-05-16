@@ -148,7 +148,6 @@
 + (STGroup *) defaultGroup;
 + (void) resetDefaultGroup;
 
-+ (ErrorManager *) DEFAULT_ERR_MGR;
 + (BOOL) debug;
 + (void) setDebug;
 + (BOOL) verbose;
