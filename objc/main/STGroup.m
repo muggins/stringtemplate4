@@ -296,7 +296,8 @@ static BOOL trackCreationEvents = NO;
      * Maybe at some point I will find where this should be handled
      * and this code can be reverted
      */
-        if ( [enclosingInstance.impl.prefix length] > 0 ) {
+        if ( [enclosingInstance.impl.prefix length] > 0 &&
+             ![aName hasPrefix:@"region__"] ) {
             unQualifiedName = [Misc getFileName:aName];
             fullyQualifiedName = [NSString stringWithFormat:@"%@%@", enclosingInstance.impl.prefix, unQualifiedName];
         }
@@ -679,13 +680,13 @@ static BOOL trackCreationEvents = NO;
 
     // it's a relative name; search path is working dir, g.stg's dir, CLASSPATH
     NSString *rootPath = [[self getRootDirURL] path];
-    NSString *fileUnderRoot = [[self getRootDirURL] path];
-    if ( [fileUnderRoot hasSuffix:@".stg"] ) {
-        fileUnderRoot = [Misc getParent:fileUnderRoot];
-    }
-    fileUnderRoot = [fileUnderRoot stringByAppendingPathComponent:aFileName];
-    fileUnderRoot = [fileUnderRoot stringByStandardizingPath];
+    NSString *fileUnderRoot = [[NSString stringWithFormat:@"%@/%@", rootPath, aFileName] stringByStandardizingPath];
     NSURL *fileURL = [NSURL fileURLWithPath:fileUnderRoot];
+    if ( fileURL == nil ) {
+        MalformedURLException *mfe = [MalformedURLException newException:@"Bad URL"];
+        [errMgr internalError:nil msg:[NSString stringWithFormat:@"can't build URL for %@/%@", rootPath, aFileName] e:mfe];
+        return;
+    }
 
     if ( isTemplateFile ) {
         g = [STGroup newSTGroup];
