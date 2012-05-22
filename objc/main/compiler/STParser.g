@@ -141,8 +141,8 @@ region
         template
         INDENT? LDELIM '@end' RDELIM
         // kill \n for <@end> on line by itself if multi-line embedded region
-        ({$region.start.line!= [input LT:1].line}?=> NEWLINE)?
-        -> {indent!=nil}?
+        ({$region.start.line != [input LT:1].line}? => NEWLINE)?
+        -> {indent != nil}?
            ^(INDENTED_EXPR $i ^(REGION[$x] ID template?))
         ->                    ^(REGION[$x] ID template?)
     ;

@@ -474,8 +474,8 @@ static BOOL trace = NO;
     }
     @catch (NSException *e) {
         StringWriter *sw = [[StringWriter newWriter] retain];
-        PrintWriter *pw = [[PrintWriter newWriter:sw] retain];
 /*
+        PrintWriter *pw = [[PrintWriter newWriter:sw] retain];
         [e printStackTrace:pw];
         [pw flush];
  */
@@ -516,6 +516,7 @@ static BOOL trace = NO;
     AMutableArray *options;
     MemBuffer *code = aWho.impl.instrs;        // which code block are we executing
  //    NSLog( @"%@\n", [aWho.impl.instrs description] );
+ //    [aWho.impl dump];
     short opcode;
     NSInteger ip = 0;
     while ( ip < aWho.impl.codeSize ) {
@@ -1569,9 +1570,9 @@ static BOOL trace = NO;
 {
     if ( a == nil )
         return NO;
-    if ( a == YES )
+    if ( a == (id)YES )
         return YES;
-    if ( a < 100 )
+    if ( a < (id)100 )
         return NO;
     if ([a isKindOfClass:[ACNumber class]])
         return [(NSNumber *)a boolValue];

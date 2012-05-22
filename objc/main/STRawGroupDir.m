@@ -24,7 +24,7 @@
 }
 
 + (STRawGroupDir *) newSTRawGroupDir:(NSString *) aDirName
-                            encoding:(NSString *) anEncoding
+                            encoding:(NSStringEncoding) anEncoding
                   delimiterStartChar:(char) aDelimiterStartChar
                    delimiterStopChar:(char) aDelimiterStopChar
 {

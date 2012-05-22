@@ -43,10 +43,8 @@
 
 - (NSString *) formatObj:(ACNumber *)obj format:(NSString *)str locale:(NSLocale *)locale
 {
-    char sep;
     NSUInteger i = 0;
     NSUInteger j = 0;
-    NSMutableString *aFmt = [NSMutableString stringWithCapacity:16];
     NSMutableString *dst = [NSMutableString stringWithCapacity:16];
     NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
     

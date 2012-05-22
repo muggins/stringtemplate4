@@ -124,7 +124,6 @@ STGroup *group;
 - (void) displayRecognitionError:(AMutableArray *)tokenNames Exception:(RecognitionException *)e;
 - (NSString *) getSourceName;
 - (void) error:(NSString *)msg;
-- (NSString *) getErrorMessage:(NSException *)e TokenNames:(AMutableArray *)TokenNames;
 }
 
 @synthesize {
@@ -161,13 +160,6 @@ STGroup *group;
     [group.errMgr groupSyntaxError:SYNTAX_ERROR srcName:[self getSourceName] e:nvae msg:msg];
     [self recover:input Exception:nil];
 }
-
-/*
-- (NSString *) getErrorMessage:(RecognitionException *)e TokenNames:(AMutableArray *)TokenNames
-{
-    return [NSString stringWithFormat:@"\%@--\%@", e.name, e.reason];
-}
-*/
 
 }
 

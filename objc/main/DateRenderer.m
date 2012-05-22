@@ -132,26 +132,16 @@ static DateRenderer_Anon1 *formatToInt;
 {
     ACNumber *style;
     NSInteger styleI;
-    NSString *dateFormat;
     NSString *dateStr;
     if (formatString == nil)
         formatString = @"short";
-//    if ([obj isMemberOfClass:[NSDate class]])
-//        d = [((NSCalendar *)obj) time];
-//    else
-//        d = (NSDate *)obj;
     style = (ACNumber *)[formatToInt get:formatString];
     if (locale == nil ) 
         locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
     if (style == nil) {
         NSDateFormatter *aFormatter = [[NSDateFormatter alloc] init];
         [aFormatter setDateFormat:formatString];
-        
-        //        dateFormat = [NSDateFormatter dateFormatFromTemplate:formatString options:0 locale:locale];
         dateStr = [aFormatter stringFromDate:d];
-        //        dateStr = [NSDateFormatter localizedStringFromDate:d dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
-        //        dateStr = [d descriptionWithCalendarFormat:dateFormat timeZone:nil locale:locale];
-        //        dateStr = [d descriptionWithCalendarFormat:formatString timeZone:nil locale:locale];
     }
     else {
         styleI = [style integerValue];

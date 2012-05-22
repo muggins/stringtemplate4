@@ -142,7 +142,6 @@
     BOOL iterateAcrossValues;
 }
 
-+ (CompiledST *) NOT_FOUND_ST;
 + (NSString *) DEFAULT_KEY;
 + (NSString *) DICT_KEY;
 + (STGroup *) defaultGroup;

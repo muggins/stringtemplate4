@@ -156,7 +156,6 @@ STGroup *group;
 - (void) displayRecognitionError:(AMutableArray *) tokenNames Exception:(RecognitionException *)e;
 - (NSString *) getSourceName;
 - (void) error:(NSString *)msg;
-- (NSString *) getErrorMessage:(NSException *)e TokenNames:(AMutableArray *)TokenNames;
 
 /* ObjC end of actions.(actionScope).methodsDecl */
 

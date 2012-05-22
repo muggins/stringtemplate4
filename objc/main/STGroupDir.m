@@ -70,7 +70,6 @@
 - (id) init:(NSString *)aDirName encoding:(NSStringEncoding)theEncoding delimiterStartChar:(unichar)aDelimiterStartChar delimiterStopChar:(unichar)aDelimiterStopChar
 {
     BOOL fExists, isDir;
-    NSString *dir;
     self=[super init:aDelimiterStartChar delimiterStopChar:aDelimiterStopChar];
     if ( self != nil ) {
         groupDirName = aDirName;

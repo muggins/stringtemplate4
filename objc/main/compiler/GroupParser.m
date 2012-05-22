@@ -345,7 +345,7 @@ static formalArgs_Scope *formalArgs_scope;
 + (NSInteger) TID { return ID; }
 + (NSInteger) TTRUE { return T_TRUE; }
 
-- (void) displayRecognitionError:(AMutableArray *) tokenNames Exception:(RecognitionException *)e
+- (void) displayRecognitionError:(AMutableArray *)tokenNames Exception:(RecognitionException *)e
 {
     NSString *msg = [self getErrorMessage:e TokenNames:[self getTokenNames]];
     [group.errMgr groupSyntaxError:SYNTAX_ERROR srcName:[self getSourceName] e:e msg:msg];
@@ -368,14 +368,6 @@ static formalArgs_Scope *formalArgs_scope;
     [group.errMgr groupSyntaxError:SYNTAX_ERROR srcName:[self getSourceName] e:nvae msg:msg];
     [self recover:input Exception:nil];
 }
-
-/*
-- (NSString *) getErrorMessage:(RecognitionException *)e TokenNames:(AMutableArray *)TokenNames
-{
-    return [NSString stringWithFormat:@"%@--%@", e.name, e.reason];
-}
-*/
-
 
 /* ObjC end actions.(actionScope).methods */
 /* ObjC start methods() */

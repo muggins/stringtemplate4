@@ -52,9 +52,7 @@
     if ( value == nil ) value = @"value=<nil>";
     NSString *fname = [self fileName];
     if ( fname == nil ) fname = @"fname=<nil>";
-    NSString *sLine = [self line];
-    if ( sLine == nil ) sLine = @"sLine=<nil>";
-    return [NSString stringWithFormat:@"addEvent{, name='%@', value=%@, location=%@:%d}", name, value, fname, sLine];
+    return [NSString stringWithFormat:@"addEvent{, name='%@', value=%@, location=%@:%d}", name, value, fname, [self line]];
 }
 
 - (void) dealloc
