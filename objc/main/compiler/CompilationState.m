@@ -112,13 +112,13 @@
 - (void) setOption:(CommonTree *)aTree
 {
     NSInteger Opt;
-    Opt = (NSInteger)[[[Compiler getSupportedOptions] get:aTree.text] integerValue];
+    Opt = (NSInteger)[[((Compiler_Anon1 *)[Compiler getSupportedOptions]) get:aTree.text] integerValue];
     [self emit1:aTree opcode:Bytecode.INSTR_STORE_OPTION arg:Opt];
 }
 
 - (void) func:(CommonToken *)templateToken tree:(CommonTree *)aTree
 {
-    NSString *funcBytecode = [[[Compiler funcs] getDict] get:aTree.text];
+    ACNumber *funcBytecode = [((LinkedHashMap *)[[Compiler funcs] getDict]) get:aTree.text];
     if (funcBytecode == nil) {
         [errMgr compileTimeError:NO_SUCH_FUNCTION templateToken:templateToken t:(CommonToken *)aTree.token];
         [self emit:aTree opcode:Bytecode.INSTR_POP];
