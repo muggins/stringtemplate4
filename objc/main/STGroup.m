@@ -296,7 +296,7 @@ static BOOL trackCreationEvents = NO;
      * Maybe at some point I will find where this should be handled
      * and this code can be reverted
      */
-        if ( [enclosingInstance.impl.prefix length] > 0 &&
+        if ( [enclosingInstance.impl.prefix length] > 1 &&
              ![aName hasPrefix:@"region__"] ) {
             unQualifiedName = [Misc getFileName:aName];
             fullyQualifiedName = [NSString stringWithFormat:@"%@%@", enclosingInstance.impl.prefix, unQualifiedName];
@@ -529,7 +529,8 @@ static BOOL trackCreationEvents = NO;
     CompiledST *code = [self compile:[self getFileName] name:enclosingTemplateName args:nil template:template templateToken:templateToken];
     NSString *mangled = [STGroup getMangledRegionName:enclosingTemplateName name:aName];
     if ( [self lookupTemplate:mangled] == nil ) {
-        [errMgr compileTimeError:NO_SUCH_REGION templateToken:templateToken t:regionT arg:enclosingTemplateName arg2:aName];
+        [errMgr compileTimeError:NO_SUCH_REGION templateToken:nil t:regionT arg:enclosingTemplateName arg2:aName];
+        //        [errMgr compileTimeError:NO_SUCH_REGION templateToken:templateToken t:regionT arg:enclosingTemplateName arg2:aName];
         return [CompiledST newCompiledST];
     }
     code.name = mangled;
@@ -609,12 +610,12 @@ static BOOL trackCreationEvents = NO;
     return code;
 }
 
-/** The "foo" of t() ::= "<@foo()>" is mangled to "region#t#foo" */
+/** The "foo" of t() ::= "<@foo()>" is mangled to "/region__/t__foo" */
 + (NSString *) getMangledRegionName:(NSString *)anEnclosingTemplateName name:(NSString *)aName
 {
     if ( [anEnclosingTemplateName characterAtIndex:0] != '/' )
         anEnclosingTemplateName = [NSString stringWithFormat:@"/%@", anEnclosingTemplateName];
-    NSString *tmp = [NSString stringWithFormat:@"region__%@__%@", anEnclosingTemplateName, aName];
+    NSString *tmp = [NSString stringWithFormat:@"/region__%@__%@", anEnclosingTemplateName, aName];
     return tmp;
 }
 
@@ -622,9 +623,9 @@ static BOOL trackCreationEvents = NO;
 /** Return "t.foo" from "region__t__foo" */
 + (NSString *) getUnMangledTemplateName:(NSString *)mangledName
 {
-    NSInteger len = [@"region__" length];
+    NSInteger len = [@"/region__" length];
     NSRange r1 = [mangledName rangeOfString:@"__" options:NSBackwardsSearch];
-    NSRange r2 = NSMakeRange(len, r1.location-len);
+    NSRange r2 = NSMakeRange(len+1, r1.location-(len+1));
     NSString *t = [mangledName substringWithRange:r2];
     NSString *r = [mangledName substringWithRange:NSMakeRange(r1.location+2, [mangledName length]-(r1.location+2))];
     NSString *tmp = [NSString stringWithFormat:@"%@.%@", t, r];
@@ -868,8 +869,6 @@ static BOOL trackCreationEvents = NO;
     // Else, we must find adaptor that fits;
     // find last fit (most specific)
     NSString *t;
-//    for ( t in [adaptors keyEnumerator] ) {
-    NSString *tmp;
     LHMKeyIterator *it = [adaptors newKeyIterator];
     while ( [it hasNext] ) {
         // t works for attributeType if attributeType subclasses t or implements
@@ -935,11 +934,10 @@ static BOOL trackCreationEvents = NO;
         r = [typeToRendererCache get:[attributeType className]];
         if ( r != nil ) return r;
     }
-    LHMEntry *e;
     NSString *key;
     LHMEntryIterator *it = (LHMEntryIterator *)[renderers newKeyIterator];
     while ( [it hasNext] ) {
-        key = [it next];
+        key = (NSString *)[it next];
         // t works for attributeType if attributeType subclasses t or implements
         id rendererClass = objc_getClass([key UTF8String]);
         if ( [[attributeType class] isSubclassOfClass:rendererClass] ) {
