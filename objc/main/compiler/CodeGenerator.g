@@ -103,7 +103,7 @@ options {
                   token:(CommonToken *)aTemplateToken;
 
 - (void) dealloc;
-// convience funcs to hide offensive sending of emit messages to
+// convenience funcs to hide offensive sending of emit messages to
 // CompilationState temp data object.
 
 - (void) emit1:(CommonTree *)opAST opcode:(short)anOpcode arg:(NSInteger)arg;

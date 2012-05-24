@@ -34,7 +34,7 @@ static NSString *ErrorType_Data[NUM_OF_ERRORENUMS] = {
 @"no such template: %@",
 @"no such template: super.%@",
 @"attribute %@ isn't defined",
-@"implicitly-defined attribute %s not visible",
+@"implicitly-defined attribute %@ not visible",
 @"missing argument definitions",
 @"no such property or can't access: %@",
 @"iterating through %@ values in zip map but template has %@ declared arguments",
