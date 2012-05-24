@@ -530,7 +530,6 @@ static BOOL trackCreationEvents = NO;
     NSString *mangled = [STGroup getMangledRegionName:enclosingTemplateName name:aName];
     if ( [self lookupTemplate:mangled] == nil ) {
         [errMgr compileTimeError:NO_SUCH_REGION templateToken:nil t:regionT arg:enclosingTemplateName arg2:aName];
-        //        [errMgr compileTimeError:NO_SUCH_REGION templateToken:templateToken t:regionT arg:enclosingTemplateName arg2:aName];
         return [CompiledST newCompiledST];
     }
     code.name = mangled;
