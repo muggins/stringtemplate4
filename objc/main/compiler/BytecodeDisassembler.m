@@ -89,7 +89,8 @@
             ip += Bytecode.OPND_SIZE_IN_BYTES;
         }
     }
-    return (([buf length] > 0) ? buf : @"buf=<nil>");
+//    return (([buf length] > 0) ? buf : @"buf=<nil>");
+    return (([buf length] > 0) ? buf : @"");
 }
 
 - (NSString *) disassemble
@@ -100,7 +101,8 @@
         i = [self disassembleInstruction:buf ip:i];
         [buf appendString:@"\n"];
     }
-    return (([buf length] > 0) ? buf : @"buf=<nil>");
+//    return (([buf length] > 0) ? buf : @"buf=<nil>");
+    return (([buf length] > 0) ? buf : @"");
 }
 
 - (NSInteger) disassembleInstruction:(NSMutableString *)buf ip:(NSInteger)ip
