@@ -907,6 +907,7 @@ static BOOL trace = NO;
             }
         }
     }
+    [it release];
 }
 
 - (void) storeArgs:(ST *)aWho attrs:(LinkedHashMap *)attrs st:(ST *)st
@@ -942,7 +943,7 @@ static BOOL trace = NO;
         id obj = [attrs get:argName];
         [st rawSetAttribute:argName value:obj];
     }
-    
+    [it release];
 }
 
 - (void) storeArgs:(ST *)aWho nargs:(NSInteger)nargs st:(ST *)st
@@ -1090,12 +1091,12 @@ static BOOL trace = NO;
 {
     if ( obj == nil ) return 0;
     NSInteger n = 0;
-    ArrayIterator *it = (ArrayIterator *)obj;
     NSString *separator = nil;
     if ( options != nil )
         separator = [options objectAtIndex:Interpreter.Option.SEPARATOR];
     BOOL seenAValue = NO;
     id iterValue;
+    ArrayIterator *it = (ArrayIterator *)obj;
     while ( [it hasNext] ) {
         iterValue = [it nextObject];
         // Emit separator if we're beyond first value
@@ -1111,6 +1112,7 @@ static BOOL trace = NO;
             seenAValue = YES;
         n += nw;
     }
+    [it release];
     return n;
 }
 
@@ -1186,14 +1188,14 @@ static BOOL trace = NO;
 - (AMutableArray *) rot_map_iterator:(ST *)aWho iter:(id)attr proto:(AMutableArray *)prototypes
 {
     AMutableArray *mapped = [[AMutableArray arrayWithCapacity:5] retain];
-    ArrayIterator *iter = (ArrayIterator *)attr;
     NSInteger i0 = 0;
     NSInteger i = 1;
     NSInteger ti = 0;
     id iterValue;
     
-    while ( [iter hasNext] ) {
-        iterValue = [iter nextObject];
+    ArrayIterator *it = (ArrayIterator *)attr;
+    while ( [it hasNext] ) {
+        iterValue = [it nextObject];
         if ( iterValue == nil || iterValue == [NSNull null] ) {
             [mapped addObject:nil];
             continue;
@@ -1211,6 +1213,7 @@ static BOOL trace = NO;
         i0++;
         i++;
     }
+    [it release];
     return mapped;
 }
 
@@ -1284,6 +1287,7 @@ static BOOL trace = NO;
                 numEmpty++;
             }
         }
+        //        [it release];
         if ( numEmpty == numExprs ) break;
         [results addObject:embedded];
         i++;
@@ -1311,6 +1315,7 @@ static BOOL trace = NO;
         ArrayIterator *it = (ArrayIterator *)obj;
         while ([it hasNext])
             [list addObject:[it nextObject]];
+        [it release];
     }
     else {
         [list addObject:obj];
@@ -1362,6 +1367,7 @@ static BOOL trace = NO;
         ArrayIterator *it = v;
         while ([it hasNext])
             last = [it nextObject];
+        [it release];
     }
     return last;
 }
@@ -1395,6 +1401,7 @@ static BOOL trace = NO;
                 obj = [it nextObject];
                 [a addObject:obj];
             };
+            [it release];
         }
         return a;
     }
@@ -1419,6 +1426,7 @@ static BOOL trace = NO;
     if ([v isKindOfClass:[ArrayIterator class]]) {
         ArrayIterator *it = (ArrayIterator *)v;
         NSArray *array = [it allObjects];
+        [it release];
         NSArray *a = [array subarrayWithRange:NSMakeRange(0, [array count]-1)];
         return a;
     }
@@ -1443,6 +1451,7 @@ static BOOL trace = NO;
             if ( obj != nil && obj != [NSNull null] )
                 [a addObject:obj];
         }
+        [it release];
         return a;
     }
     return v;
@@ -1465,6 +1474,7 @@ static BOOL trace = NO;
         while ([it hasNext]) {
             [a insertObject:[it nextObject] atIndex:0];
         }
+        [it release];
         return a;
     }
     return v;
@@ -1494,6 +1504,7 @@ static BOOL trace = NO;
             [it nextObject];
             i++;
         }
+        [it release];
     }
     return i;
 }
@@ -1528,32 +1539,32 @@ static BOOL trace = NO;
 
 - (ArrayIterator *) convertAnythingIteratableToIterator:(id)obj
 {
-    ArrayIterator *iter = nil;
+    ArrayIterator *it = nil;
     if ( obj == nil )
         return nil;
     if ( [obj isKindOfClass:[AMutableArray class]] ) {
         AMutableArray *obj1 = obj;
-        iter = (ArrayIterator *)[obj1 objectEnumerator];
+        it = (ArrayIterator *)[obj1 objectEnumerator];
     }
     else if ( [obj  isKindOfClass:[NSArray class]] )
-        iter = (ArrayIterator *)[ArrayIterator newIterator:(NSArray *)obj];
+        it = (ArrayIterator *)[ArrayIterator newIterator:(NSArray *)obj];
     else if ( currentScope.st.groupThatCreatedThisInstance.iterateAcrossValues &&
              [obj isKindOfClass:[HashMap class]] )
-            iter = (ArrayIterator *)[ArrayIterator newIterator:[[(HashMap *)obj values] toArray]];
+            it = (ArrayIterator *)[ArrayIterator newIterator:[[(HashMap *)obj values] toArray]];
     else if (  currentScope.st.groupThatCreatedThisInstance.iterateAcrossValues &&
              [obj isKindOfClass:[AMutableDictionary class]] )
-            iter = (ArrayIterator *)[obj objectEnumerator];
+            it = (ArrayIterator *)[obj objectEnumerator];
     else if ( [obj isKindOfClass:[HashMap class]] )
-        iter = (ArrayIterator *)[ArrayIterator newIterator:[[(HashMap *)obj keySet] toArray]];
+        it = (ArrayIterator *)[ArrayIterator newIterator:[[(HashMap *)obj keySet] toArray]];
     else if ( [obj isKindOfClass:[AMutableDictionary class]] )
-        iter = (ArrayIterator *)[obj keyEnumerator];
+        it = (ArrayIterator *)[obj keyEnumerator];
     else if ( [obj isKindOfClass:[NSDictionary class]] )
-        iter = (ArrayIterator *)[ArrayIterator newIteratorForDictKey:(NSDictionary *)obj];
+        it = (ArrayIterator *)[ArrayIterator newIteratorForDictKey:(NSDictionary *)obj];
     else if ( [obj isKindOfClass:[ArrayIterator class]] )
-        iter = (ArrayIterator *)obj;
-    if ( iter == nil )
+        it = (ArrayIterator *)obj;
+    if ( it == nil )
         return obj;
-    return iter;
+    return it;
 }
 
 - (ArrayIterator *) convertAnythingToIterator:(id)obj
@@ -1702,6 +1713,7 @@ static BOOL trace = NO;
             [invokedST rawSetAttribute:arg.name value:arg.defaultValue];
         }
     }
+    [it release];
 }
 
 - (void) popScope
@@ -1822,7 +1834,7 @@ static BOOL trace = NO;
             id iterValue = [it nextObject];
             [self printForTrace:tr obj:iterValue];
         }
-        
+        [it release];
         [tr appendString:@" ]"];
     }
     else {

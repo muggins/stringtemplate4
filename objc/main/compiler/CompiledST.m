@@ -173,6 +173,7 @@ static CompiledST *NOT_FOUND_ST = nil;
             }
         }
     }
+    [it release];
 }
 
 - (void) defineFormalArgs:(AMutableArray *)args
@@ -189,6 +190,7 @@ static CompiledST *NOT_FOUND_ST = nil;
             a = [it nextObject];
             [self addArg:a];
         }
+        [it release];
     }
 }
 
@@ -215,7 +217,7 @@ static CompiledST *NOT_FOUND_ST = nil;
             [group rawDefineTemplate:sub.name code:sub defT:sub.templateDefStartToken];
             [sub defineImplicitlyDefinedTemplates:group];
         }
-        
+        [it release];
     }
 }
 

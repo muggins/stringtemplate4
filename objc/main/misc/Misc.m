@@ -45,16 +45,17 @@ static NSString *newline = @"\n";
     newline = aNewLine;
 }
 
-+ (NSString *) join:(ArrayIterator *)iter separator:(NSString *)separator
++ (NSString *) join:(ArrayIterator *)it separator:(NSString *)separator
 {
     NSMutableString *buf = [NSMutableString stringWithCapacity:16];
     NSString *obj;
-    while ( (obj = [iter nextObject]) != nil ) {
+    while ( (obj = [it nextObject]) != nil ) {
         [buf appendString:[obj description]];
-        if ([iter hasNext]) {
+        if ([it hasNext]) {
             [buf appendString:separator];
         }
-    };
+    }
+    [it release];
     return [buf description];
 }
 

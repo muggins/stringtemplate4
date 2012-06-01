@@ -136,6 +136,7 @@
             return traceStr;
         }
     }
+    [it release];
     return trace;
 }
 

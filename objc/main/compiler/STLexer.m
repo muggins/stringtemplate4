@@ -450,6 +450,7 @@ delimiterStopChar:(unichar)aStopChar
         ArrayIterator *it = [ArrayIterator newIterator:argTokens];
         while ( [it hasNext] )
            [self emit:[it nextObject]];
+        [it release];
 //        for (CommonToken *t in argTokens)
 //            [self emit:t];
         [input release:m];

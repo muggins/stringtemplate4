@@ -302,6 +302,7 @@
             [writer writeStr:ind];
         }
     }
+    [it release];
     
     // If current anchor is beyond current indent width, indent to anchor
     // *after* doing indents (might tabs in there or whatever)

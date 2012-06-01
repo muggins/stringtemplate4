@@ -877,6 +877,7 @@ static BOOL trackCreationEvents = NO;
             a = [adaptors get:t];
         }
     }
+    [it release];
     [typeToAdaptorCache put:NSStringFromClass(attributeType) value:a];
     return a;
 }
@@ -948,6 +949,7 @@ static BOOL trackCreationEvents = NO;
             return r;
         }
     }
+    [it release];
     return nil;
 }
 
@@ -1044,6 +1046,7 @@ static BOOL trackCreationEvents = NO;
             [buf appendString:[Misc join:[[[c.formalArguments values] toArray] objectEnumerator] separator:@","]];
         [buf appendFormat:@") ::= <<%@%@%@>>%@", Misc.newline, c.template, Misc.newline, Misc.newline];
     }
+    [it release];
     return [buf description];
 }
 
@@ -1069,6 +1072,7 @@ static BOOL trackCreationEvents = NO;
             [result addObject:e.key];
         }
     }
+    [it release];
     return result;
 }
 
