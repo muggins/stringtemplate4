@@ -46,7 +46,7 @@
     NSUInteger i = 0;
     NSUInteger j = 0;
     NSMutableString *dst = [NSMutableString stringWithCapacity:16];
-    NSNumberFormatter *numberFormatter = [[[NSNumberFormatter alloc] init] autorelease];
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     
     // specify just positive format
     //    [numberFormatter setFormat:@"$#,##0.00"];

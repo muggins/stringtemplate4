@@ -40,9 +40,9 @@
     int j = 0;
     
     for (EvalTemplateEvent *s in stack)
-        path[j++] = [[[Wrapper alloc] init:s] autorelease];
+        path[j++] = [[Wrapper alloc] init:s];
     
-    TreePath *p = [[[TreePath alloc] init:path] autorelease];
+    TreePath *p = [[TreePath alloc] init:path];
     [viewFrame.tree setSelectionPath:p];
     [viewFrame.tree scrollPathToVisible:p];
     [self updateCurrentST:viewFrame];
@@ -102,27 +102,27 @@
 
 - (void) open
 {
-    viewFrame = [[[STViewFrame alloc] init] autorelease];
+    viewFrame = [[STViewFrame alloc] init];
     [self updateStack:currentScope m:viewFrame];
     [self updateAttributes:currentScope m:viewFrame];
     NSMutableArray * events = currentScope.events;
-    tmodel = [[[JTreeSTModel alloc] init:interp param1:(EvalTemplateEvent *)[events objectAtIndex:[events count] - 1]] autorelease];
+    tmodel = [[JTreeSTModel alloc] init:interp param1:(EvalTemplateEvent *)[events objectAtIndex:[events count] - 1]];
     [viewFrame.tree setModel:tmodel];
-    [viewFrame.tree addTreeSelectionListener:[[[STViz_Anon1 alloc] init] autorelease]];
-    JTreeASTModel * astModel = [[[JTreeASTModel alloc] init:[[[CommonTreeAdaptor alloc] init] autorelease] param1:currentScope.st.impl.ast] autorelease];
+    [viewFrame.tree addTreeSelectionListener:[[STViz_Anon1 alloc] init]];
+    JTreeASTModel * astModel = [[JTreeASTModel alloc] init:[[CommonTreeAdaptor alloc] init] param1:currentScope.st.impl.ast];
     [viewFrame.ast setModel:astModel];
-    [viewFrame.ast addTreeSelectionListener:[[[STViz_Anon2 alloc] init] autorelease]];
+    [viewFrame.ast addTreeSelectionListener:[[STViz_Anon2 alloc] init]];
     [viewFrame.output setText:output];
     [viewFrame.template setText:currentScope.st.impl.template];
     [viewFrame.bytecode setText:[currentScope.st.impl disasm]];
     [viewFrame.trace setText:[Misc join:[trace objectEnumerator] param1:@"\n"]];
-    CaretListener * caretListenerLabel = [[[STViz_Anon3 alloc] init] autorelease];
+    CaretListener * caretListenerLabel = [[STViz_Anon3 alloc] init];
     [viewFrame.output addCaretListener:caretListenerLabel];
     if (errors == nil || [errors count] == 0) {
         [viewFrame.errorScrollPane setVisible:NO];
     }
     else {
-        DefaultListModel *errorListModel = [[[DefaultListModel alloc] init] autorelease];
+        DefaultListModel *errorListModel = [[DefaultListModel alloc] init];
         
         for (STMessage *msg in errors) {
             [errorListModel addElement:msg];
@@ -130,7 +130,7 @@
         
         [viewFrame.errorList setModel:errorListModel];
     }
-    [viewFrame.errorList addListSelectionListener:[[[STViz_Anon4 alloc] init] autorelease]];
+    [viewFrame.errorList addListSelectionListener:[[STViz_Anon4 alloc] init]];
     Border * empty = [BorderFactory createEmptyBorder];
     [viewFrame.treeContentSplitPane setBorder:empty];
     [viewFrame.outputTemplateSplitPane setBorder:empty];
@@ -157,7 +157,7 @@
     [m.bytecode setText:[currentScope.st.impl disasm]];
     [m.template moveCaretPosition:0];
     [m.template setText:currentScope.st.impl.template];
-    JTreeASTModel * astModel = [[[JTreeASTModel alloc] init:[[[CommonTreeAdaptor alloc] init] autorelease] param1:currentScope.st.impl.ast] autorelease];
+    JTreeASTModel * astModel = [[JTreeASTModel alloc] init:[[CommonTreeAdaptor alloc] init] param1:currentScope.st.impl.ast];
     [viewFrame.ast setModel:astModel];
     NSMutableArray * events = currentScope.events;
     EvalTemplateEvent * e = (EvalTemplateEvent *)[events objectAtIndex:[events count] - 1];
@@ -189,7 +189,7 @@
 }
 
 - (void) updateAttributes:(InstanceScope *)scope m:(STViewFrame *)m {
-    [m.attributes setModel:[[[JTreeScopeStackModel alloc] init:scope] autorelease]];
+    [m.attributes setModel:[[JTreeScopeStackModel alloc] init:scope]];
     [m.attributes setRootVisible:NO];
     [m.attributes setShowsRootHandles:YES];
 }
@@ -224,7 +224,7 @@
     NSString * templates = @"method(type,name,locals,args,stats) ::= <<\npublic <type> <name>(<args:{a| int <a>}; separator=\", \">) {\n    <if(locals)>int locals[<locals>];<endif>\n    <stats;separator=\"\\n\">\n}\n>>\nassign(a,b) ::= \"<a> = <b>;\"\nreturn(x) ::= <<return <x>;>>\nparen(x) ::= \"(<x>)\"\n";
     NSString *tmpdir = @"/tmp";
     [self writeFile:tmpdir fileName:@"t.stg" content:templates];
-    STGroup * group = [[STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]] autorelease];
+    STGroup * group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]];
     ST * st = [group getInstanceOf:@"method"];
     [st.impl dump];
     [st add:@"type" value:@"float"];
@@ -252,7 +252,7 @@
     NSString *templates = @"t1(q1=\"Some\\nText\") ::= <<\n<q1>\n>>\n\nt2(p1) ::= <<\n<p1>\n>>\n\nmain() ::= <<\nSTART-<t1()>-END\n\nSTART-<t2(p1=\"Some\\nText\")>-END\n>>\n";
     NSString *tmpdir = @"/tmp";
     [self writeFile:tmpdir fileName:@"t.stg" content:templates];
-    STGroup *group = [[STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]] autorelease];
+    STGroup *group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]];
     ST *st = [group getInstanceOf:@"main"];
     STViz * viz = [st inspect];
 }
@@ -261,14 +261,14 @@
     NSString *templates = @"main() ::= <<\nFoo: <{bar};format=\"lower\">\n>>\n";
     NSString *tmpdir = [System getProperty:@"java.io.tmpdir"];
     [self writeFile:tmpdir fileName:@"t.stg" content:templates];
-    STGroup *group = [[STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]] autorelease];
+    STGroup *group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]];
     ST *st = [group getInstanceOf:@"main"];
     [st inspect];
 }
 
 + (void) test4 {
     NSString *templates = @"main(t) ::= <<\nhi: <t>\n>>\nfoo(x,y={hi}) ::= \"<bar(x,y)>\"\nbar(x,y) ::= << <y> >>\nignore(m) ::= \"<m>\"\n";
-    STGroup *group = [[STGroupString newSTGroupString:templates] autorelease];
+    STGroup *group = [STGroupString newSTGroupString:templates];
     ST *st = [group getInstanceOf:@"main"];
     ST *foo = [group getInstanceOf:@"foo"];
     [st add:@"t" value:foo];
@@ -281,11 +281,11 @@
 + (void) writeFile:(NSString *)dir fileName:(NSString *)fileName content:(NSString *)content {
     
     @try {
-        File * f = [[[File alloc] init:dir param1:fileName] autorelease];
+        File * f = [[File alloc] init:dir param1:fileName];
         if (![[f parentFile] exists])
             [[f parentFile] mkdirs];
-        FileWriter * w = [[[FileWriter alloc] init:f] autorelease];
-        BufferedWriter * bw = [[[BufferedWriter alloc] init:w] autorelease];
+        FileWriter * w = [[FileWriter alloc] init:f];
+        BufferedWriter * bw = [[BufferedWriter alloc] init:w];
         [bw write:content];
         [bw close];
         [w close];
