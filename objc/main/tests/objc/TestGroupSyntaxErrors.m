@@ -101,7 +101,7 @@
     STGroup *group = [[STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]] autorelease];
     [group setListener:errors];
     [group load];
-    NSString *expected = @"t.stg 1:6: mismatched input ')' expecting ID\n";
+    NSString *expected = @"t.stg 1:6: missing ID at ')'\n";
     NSString *result = [errors description];
     [self assertEquals:expected result:result];
 }
@@ -114,7 +114,7 @@
     STGroup *group = [[STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]] autorelease];
     [group setListener:errors];
     [group load];
-    NSString *expected = @"[t.stg 1:6: mismatched input ',' expecting ID, t.stg 1:7: mismatched input ')' expecting ID]";
+    NSString *expected = @"[t.stg 1:6: missing ID at ',', t.stg 1:7: missing ID at ')']";
     NSString *result = [errors.errors description];
     [self assertEquals:expected result:result];
 }

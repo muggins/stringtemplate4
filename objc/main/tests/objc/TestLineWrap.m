@@ -318,7 +318,7 @@
 - (void) test19LineWrapInNestedExpr
 {
     int aa[57] = { 3, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 888, 2, 1, 6, 32, 5, 6, 77, 4, 9, 20, 2, 1, 4, 63, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 6, 32, 5, 6, 77, 3, 9, 20, 2, 1, 4, 6, 32, 5, 6, 77, 888, 1, 6, 32, 5 };
-    NSString *templates = @"top(arrays) ::= <<Arrays: <arrays>done>>\narray(values) ::= <<int[] a = { <values; anchor, wrap=\"\\n\", separator=\",\"> };<\\n\>>>\n";
+    NSString *templates = @"top(arrays) ::= <<Arrays: <arrays>done>>\narray(values) ::= <<int[] a = { <values; anchor, wrap=\"\\n\", separator=\",\"> };<\\n\\>>>\n";
     [self writeFile:tmpdir fileName:@"t.stg" content:templates];
     STGroup *group = [[STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]] autorelease];
     ST *top = [group getInstanceOf:@"top"];

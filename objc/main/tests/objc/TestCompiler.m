@@ -486,7 +486,7 @@
     NSString *asmExpected = @"new 0 0, write";
     NSString *asmResult = [code dis_instrs];
     [self assertEquals:asmExpected result:asmResult];
-    NSString *expected = @"[region__/a__r]";
+    NSString *expected = @"[/region__/a__r]";
     NSString *result = [[Strings newStringsWithArray:code.strings] description];
     [self assertEquals:expected result:result];
     return;
