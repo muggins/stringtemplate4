@@ -562,6 +562,7 @@ static DebugState *st_debugState = nil;
         }
         [attributes put:arg.name value:obj];
     }
+    [it release];
     return attributes;
 }
 
@@ -832,6 +833,7 @@ static DebugState *st_debugState = nil;
         [st add:[NSString stringWithFormat:@"arg%d", i] value:a];
         i++;
     }
+    [it release];
     return [st renderWithLineWidth:lineWidth];
 }
 
