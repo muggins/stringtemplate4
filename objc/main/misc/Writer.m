@@ -48,7 +48,7 @@
     self=[super init];
     if ( self != nil ) {
         capacity = 1024;
-        data = [[NSMutableData dataWithCapacity:capacity] retain];
+        data = [NSMutableData dataWithCapacity:capacity];
         ptr = [data mutableBytes];
         for (int i = 0; i < capacity; i++) {
             ptr[i] = '\0';
@@ -63,7 +63,7 @@
     self=[super init];
     if ( self != nil ) {
         capacity = len;
-        data = [[NSMutableData dataWithCapacity:capacity] retain];
+        data = [NSMutableData dataWithCapacity:capacity];
         ptr = [data mutableBytes];
         for (int i = 0; i < capacity; i++) {
             ptr[i] = '\0';
@@ -78,7 +78,8 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in Writer" );
 #endif
-    [super dealloc];
+    data = nil;
+    // [super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)aZone
@@ -151,7 +152,7 @@
     if ( ptr[ip] != '\0') [self length];
     ptr[ip++] = aChar;
     ptr[ip] = '\0';
-    putchar(aChar);
+    putchar((int)aChar);
 }
 
 - (void) writeStr:(NSString *)str pos:(NSInteger)offset len:(NSInteger)len
@@ -261,6 +262,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    writer = nil;
+    // [super dealloc];
+}
+
 /**
  * Flushes the output buffer to the underlying character stream, without
  * flushing the stream itself.  This method is non-private only so that it
@@ -273,7 +280,7 @@
     if (nextChar == 0)
         return;
     [self ensureCapacity:nextChar+2];
-    [writer write:ptr offset:0 len:nextChar];
+    [writer write:data offset:0 len:nextChar];
     nextChar = 0;
 //    }
 }
@@ -284,7 +291,7 @@
  *
  * @exception  IOException  If an I/O error occurs
  */
-- (void) write:(int) c
+- (void) write:(NSInteger) c
 {
 //    synchronized (lock) {
 //        ensureOpen();
@@ -295,11 +302,11 @@
 //    }
 }
 
-- (void) write:(NSData *)cbuf offset:(NSInteger)off len:(NSInteger)len
+- (void) write:(NSMutableData *)cbuf offset:(NSInteger)off len:(NSInteger)len
 {
     char *src;
     [self ensureCapacity:len];
-    src = [cbuf mutableBytes];
+    src = [(NSMutableData *)cbuf mutableBytes];
 //    synchronized (lock) {
 //        ensureOpen();
         if ((off < 0) || (off > [data length]) || (len < 0) ||
@@ -319,9 +326,10 @@
             return;
         }
         
-        int b = off, t = off + len;
+//        NSInteger b = off;
+        NSInteger t = off + len;
         while (nextChar < t) {
-            int d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
+//            NSInteger d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
 //            System.arraycopy(cbuf, b, cb, nextChar, d);
             for ( NSInteger i = 0; i < len; i++ ) {
                 ptr[nextChar++] = src[i];
@@ -352,10 +360,10 @@
 {
 //    synchronized (lock) {
 //        ensureOpen();
-    NSString *dest;
+//    NSString *dest;
         NSInteger b = off, t = off + len;
         while (b < t) {
-            int d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
+            NSInteger d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
 //            s.getChars(b, b + d, cb, nextChar);
             [s substringWithRange:NSMakeRange(b, b + d)];
             b += d;
@@ -417,6 +425,12 @@
     return self;
 }
 
+- (void) dealloc
+{
+    os = nil;
+    // [super dealloc];
+}
+
 #ifdef DONTUSEYET
 - (void) write:(char)c
 {
@@ -470,7 +484,7 @@
     self=[super init];
     if ( self != nil ) {
         fd = anFD;
-        fh = [[NSFileHandle alloc] initWithFileDescriptor:fd];
+        fh = [[NSFileHandle alloc] initWithFileDescriptor:(int)fd];
     }
     return self;
 }
@@ -501,9 +515,9 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in FileWriter" );
 #endif
-    if ( fn ) [fn release];
-    if ( fh ) [fh release];
-    [super dealloc];
+    fn = nil;
+    fh = nil;
+    // [super dealloc];
 }
 
 

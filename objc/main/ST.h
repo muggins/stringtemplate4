@@ -80,12 +80,12 @@ typedef enum {
 @interface DebugState : NSObject {
 
     /** Record who made us? ConstructionEvent creates Exception to grab stack */
-    __strong ConstructionEvent *newSTEvent;
+    __strong ConstructionEvent *aSTEvent;
     /** Track construction-time add attribute "events"; used for ST user-level debugging */
     __strong LinkedHashMap *addAttrEvents;
 }
 
-@property (retain) ConstructionEvent *newSTEvent;
+@property (retain) ConstructionEvent *aSTEvent;
 @property (retain) LinkedHashMap *addAttrEvents;
 
 + (id) newDebugState;

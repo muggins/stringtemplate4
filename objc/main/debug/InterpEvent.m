@@ -56,14 +56,14 @@
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat:@"{who=%@, start=%d, stop=%d}",
+    return [NSString stringWithFormat:@"{who=%@, start=%ld, stop=%ld}",
             [self className], outputStartChar, outputStopChar];
 }
 
 - (void) dealloc
 {
-    if ( scope ) [scope release];
-    [super dealloc];
+    scope = nil;
+    // [super dealloc];
 }
 
 @synthesize scope;

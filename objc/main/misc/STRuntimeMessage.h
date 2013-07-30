@@ -37,10 +37,10 @@
 
 @interface STRuntimeMessage : STMessage {
 
-	Interpreter *interp;
+	__strong Interpreter *interp;
     /** Where error occurred in bytecode memory */
     NSInteger ip;
-	InstanceScope *scope;
+	__strong InstanceScope *scope;
 }
 
 @property (retain) Interpreter *interp;

@@ -72,9 +72,9 @@
      * outside mode.
      */
     NSInteger subtemplateDepth;
-    ErrorManager *errMgr;
-    CommonToken *templateToken;
-    id<CharStream> input;
+    __strong ErrorManager *errMgr;
+    __strong CommonToken *templateToken;
+    __strong id<CharStream> input;
     unichar c;
     
     /**
@@ -89,7 +89,7 @@
      * Our lexer routines might have to emit more than a single token. We
      * buffer everything through this list.
      */
-    AMutableArray *tokens;
+    __strong AMutableArray *tokens;
 }
 
 + (NSInteger) RCURLY;

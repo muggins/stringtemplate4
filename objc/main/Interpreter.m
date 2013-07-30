@@ -1801,14 +1801,14 @@ static BOOL trace = NO;
     NSString *name = [NSString stringWithFormat:@"%@:", aWho.impl.name];
     if (aWho.impl.name == ST.UNKNOWN_NAME)
         name = @"";
-    [tr appendString:[NSMutableString stringWithFormat:@"%-40s%@%@\tstack=[", name, buf]];
+    [tr appendString:[NSMutableString stringWithFormat:@"%-40@%@\tstack=[", name, buf]];
     
     for (NSInteger i = 0; i <= sp; i++) {
         id obj = operands[i];
         [self printForTrace:tr obj:obj];
     }
     
-    [tr appendFormat:@" ], calls=%@, sp=%d, nw=%d", [self getEnclosingInstanceStackString:currentScope], sp, nwline];
+    [tr appendFormat:@" ], calls=%@, sp=%d, nw=%d", [self getEnclosingInstanceStackString:currentScope], (long)sp, (long)nwline];
     NSString *s = [NSString stringWithString:tr];
     if (debug)
         [executeTrace addObject:s];

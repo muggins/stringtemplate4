@@ -55,8 +55,8 @@
 - (void) load;
 - (NSString *) getFileName;
 
-@property (retain) NSString *sourceName;
-@property (retain) NSString *text;
+@property (copy) NSString *sourceName;
+@property (copy) NSString *text;
 @property (assign) BOOL alreadyLoaded;
 
 @end

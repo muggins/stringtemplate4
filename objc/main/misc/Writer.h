@@ -32,8 +32,8 @@
 
 @interface Writer : NSMutableString<STWriter> {
     NSInteger capacity;
-    NSMutableData *data;
-    __strong char *ptr;
+    __strong NSMutableData *data;
+    char *ptr;
     NSInteger ip;
     id lock;
 
@@ -72,12 +72,12 @@
 @property (retain) NSMutableData *data;
 @property (assign) char *ptr;
 @property (assign) NSInteger ip;
-@property (retain) id lock;
+@property (copy) id lock;
 
 @end
 
 @interface BufferedWriter : Writer {
-    Writer *writer;
+    __strong Writer *writer;
     NSInteger nChars;
     NSInteger nextChar;
 }
@@ -87,6 +87,7 @@
 
 - (id) initWithWriter:(Writer *)op;
 - (id) initWithWriter:(Writer *)op len:(NSInteger)sz;
+- (void) dealloc;
 - (void) close;
 - (void) flushBuffer;
 //- (void) newline;
@@ -100,8 +101,10 @@
 @end
 
 @interface OutputStreamWriter : Writer {
-    NSOutputStream *os;
+    __strong NSOutputStream *os;
 }
+
+@property (retain) NSOutputStream *os;
 
 + (id) newWriter:(NSOutputStream *)anOS;
 + (id) newWriter:(NSOutputStream *)anOS charSet:(NSCharacterSet *)charSet;
@@ -109,6 +112,7 @@
 + (id) newWriter:(NSOutputStream *)anOS charSetName:(NSString *)charSetName;
 
 - (id) init:(NSOutputStream *)anOS charSet:(NSCharacterSet *)charSet encoding:(NSStringEncoding)encoding;
+- (void) dealloc;
 //- (void) write:(char)c;
 //- (void) write:(char *)cbuf offset:(NSInteger)off len:(NSInteger)len;
 //- (void) writeStr:(NSString *)str offset:(NSInteger)off len:(NSInteger)len;
@@ -117,8 +121,8 @@
 
 @interface FileWriter : OutputStreamWriter {
     NSInteger fd;
-    NSFileHandle *fh;
-    NSString *fn;
+    __strong NSFileHandle *fh;
+    __strong NSString *fn;
     BOOL append;
 }
 

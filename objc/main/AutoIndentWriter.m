@@ -28,7 +28,6 @@
 #import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
 #import "AutoIndentWriter.h"
-#import "Writer.h"
 #import "ST.h"
 #import "Misc.h"
 
@@ -72,8 +71,8 @@
 {
     self=[super init];
     if ( self != nil ) {
-        indents = [[AMutableArray arrayWithCapacity:5] retain];
-        anchors = [[IntArray newArrayWithLen:10] retain];
+        indents = [AMutableArray arrayWithCapacity:5];
+        anchors = [IntArray newArrayWithLen:10];
         anchors_sp = -1;
         atStartOfLine = YES;
         charPosition = 0;
@@ -81,7 +80,6 @@
         lineWidth = ST.NO_WRAP;
         [indents addObject:@""];
         newline = aNewline;
-        [newline retain];
         [Misc setNewline:newline];
         ip = 0;
         if (aWriter == nil) {
@@ -96,12 +94,7 @@
             self.ip = writer.ip;
  */
         }
-        if ( writer != self) [writer retain];
-        if ( newline != aNewline ) {
-            if ( newline ) [newline release];
-            if ( aNewline ) [aNewline retain];
-            newline = aNewline;
-        }
+        newline = aNewline;
     }
     return self;
 }
@@ -110,8 +103,8 @@
 {
     self=[super initWithCapacity:(NSUInteger)sz];
     if ( self != nil ) {
-        indents = [[AMutableArray arrayWithCapacity:5] retain];
-        anchors = [[IntArray newArrayWithLen:10] retain];
+        indents = [AMutableArray arrayWithCapacity:5];
+        anchors = [IntArray newArrayWithLen:10];
         anchors_sp = -1;
         atStartOfLine = YES;
         charPosition = 0;
@@ -119,7 +112,6 @@
         lineWidth = ST.NO_WRAP;
         [indents addObject:@""];
         newline = @"\n";
-        [newline retain];
         [Misc setNewline:newline];
         writer = self;
         ip = 0;
@@ -132,12 +124,11 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in AutoIndentWriter" );
 #endif
-    if ( anchors ) [anchors release];
-    if ( data )    [data release];
-    if ( indents ) [indents release];
-    if ( newline ) [newline release];
-    if ( writer ) [writer release];
-    [super dealloc];
+    indents = nil;
+    anchors = nil;
+    newline = nil;
+    writer = nil;
+    // [super dealloc];
 }
 
 - (id) copyWithZone:(NSZone *)aZone
@@ -302,7 +293,6 @@
             [writer writeStr:ind];
         }
     }
-    [it release];
     
     // If current anchor is beyond current indent width, indent to anchor
     // *after* doing indents (might tabs in there or whatever)

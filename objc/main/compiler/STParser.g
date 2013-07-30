@@ -56,9 +56,9 @@ CommonToken *templateToken;
 }
 
 @properties {
-@property (retain) conditional_Scope *conditional_scope;
-@property (retain, getter=getErrorManager, setter=setErrorManager:) ErrorManager *errMgr;
-@property (retain, getter=getTemplateToken, setter=setTemplateToken:) CommonToken *templateToken;
+@property (copy) conditional_Scope *conditional_scope;
+@property (copy, getter=getErrorManager, setter=setErrorManager:) ErrorManager *errMgr;
+@property (copy, getter=getTemplateToken, setter=setTemplateToken:) CommonToken *templateToken;
 }
 
 @methodsDecl {

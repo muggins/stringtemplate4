@@ -160,9 +160,9 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in OBJCMethod" );
 #endif
-    if ( name ) [name release];
-    if ( selString ) [selString release];
-    if ( obj ) [obj release];
+    name = nil;
+    selString = nil;
+    obj = nil;
     [super dealloc];
 }
 
@@ -214,7 +214,7 @@ static STNoSuchPropertyException *cachedException;
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in ObjectModelAdaptor" );
 #endif
-    if ( classAndPropertyToMemberCache ) [classAndPropertyToMemberCache release];
+    classAndPropertyToMemberCache = nil;
     [super dealloc];
 }
 

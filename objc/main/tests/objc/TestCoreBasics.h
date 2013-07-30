@@ -23,7 +23,7 @@
 - (id) get:(id)aKey;
 - (void) put:(id)aName value:(id)anObj;
 
-@property (retain) LinkedHashMap *aDict;
+@property (copy) LinkedHashMap *aDict;
 @end
 
 @interface TestCoreBasics_Anon3 : NSObject {
@@ -35,7 +35,7 @@
 - (id) get:(id)aKey;
 - (void) put:(id)aName value:(id)anObj;
 
-@property (retain) LinkedHashMap *aDict;
+@property (copy) LinkedHashMap *aDict;
 @end
 
 
