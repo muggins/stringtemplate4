@@ -33,6 +33,12 @@
 
 @implementation Writer
 
+@synthesize capacity;
+@synthesize data;
+@synthesize ptr;
+@synthesize ip;
+@synthesize lock;
+
 + (NSInteger) NO_WRAP
 {
     return 1000;
@@ -79,6 +85,7 @@
     NSLog( @"called dealloc in Writer" );
 #endif
     data = nil;
+    lock = nil;
     // [super dealloc];
 }
 
@@ -230,12 +237,6 @@
     return;
 }
 
-@synthesize capacity;
-@synthesize data;
-@synthesize ptr;
-@synthesize ip;
-@synthesize lock;
-
 @end
 
 @implementation BufferedWriter
@@ -309,35 +310,35 @@
     src = [(NSMutableData *)cbuf mutableBytes];
 //    synchronized (lock) {
 //        ensureOpen();
-        if ((off < 0) || (off > [data length]) || (len < 0) ||
-            ((off + len) > [data length]) || ((off + len) < 0)) {
+    if ((off < 0) || (off > [data length]) || (len < 0) ||
+        ((off + len) > [data length]) || ((off + len) < 0)) {
 //            @throw [IndexOutOfBoundsException newException];
-            @throw [RuntimeException newException:@"IndexOutOfBounds" ];
-        } else if (len == 0) {
-            return;
-        } 
+        @throw [RuntimeException newException:@"IndexOutOfBounds" ];
+    } else if (len == 0) {
+        return;
+    } 
         
-        if (len >= nChars) {
-            /* If the request length exceeds the size of the output buffer,
-             flush the buffer and then write the data directly.  In this
-             way buffered streams will cascade harmlessly. */
+    if (len >= nChars) {
+        /* If the request length exceeds the size of the output buffer,
+        flush the buffer and then write the data directly.  In this
+        way buffered streams will cascade harmlessly. */
+        [self flushBuffer];
+        [self write:cbuf offset:off len:len];
+            return;
+    }
+        
+//    NSInteger b = off;
+    NSInteger t = off + len;
+    while (nextChar < t) {
+//        NSInteger d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
+//        System.arraycopy(cbuf, b, cb, nextChar, d);
+        for ( NSInteger i = 0; i < len; i++ ) {
+            ptr[nextChar++] = src[i];
+        }
+        ptr[nextChar] = '\0';
+        if (nextChar >= nChars)
             [self flushBuffer];
-            [self write:cbuf offset:off len:len];
-            return;
-        }
-        
-//        NSInteger b = off;
-        NSInteger t = off + len;
-        while (nextChar < t) {
-//            NSInteger d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
-//            System.arraycopy(cbuf, b, cb, nextChar, d);
-            for ( NSInteger i = 0; i < len; i++ ) {
-                ptr[nextChar++] = src[i];
-            }
-            ptr[nextChar] = '\0';
-            if (nextChar >= nChars)
-                [self flushBuffer];
-        }
+    }
 //    }
 }
 
@@ -361,16 +362,17 @@
 //    synchronized (lock) {
 //        ensureOpen();
 //    NSString *dest;
-        NSInteger b = off, t = off + len;
-        while (b < t) {
-            NSInteger d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
-//            s.getChars(b, b + d, cb, nextChar);
-            [s substringWithRange:NSMakeRange(b, b + d)];
-            b += d;
-            nextChar += d;
-            if (nextChar >= nChars)
-                [self flushBuffer];
-        }
+//    nChars = len;
+    NSInteger b = off, t = off + len;
+    while (b < t) {
+        NSInteger d = (nChars - nextChar) < (t - b) ? (nChars - nextChar) : (t - b);
+//           s.getChars(b, b + d, cb, nextChar);
+        [s substringWithRange:NSMakeRange(b, b + d)];
+        b += d;
+        nextChar += d;
+        if (nextChar >= nChars)
+            [self flushBuffer];
+    }
 //    }
 }
 

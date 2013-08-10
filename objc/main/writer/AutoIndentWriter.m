@@ -49,12 +49,12 @@
 
 + (id) newWriter:(Writer *)aWriter
 {
-    return [[AutoIndentWriter alloc] init:aWriter newline:@"\n"];
+    return [[AutoIndentWriter alloc] initWithWriter:(Writer *)aWriter newline:@"\n"];
 }
 
 + (id) newWriter:(Writer *)aWriter newline:(NSString *)aStr
 {
-    return [[AutoIndentWriter alloc] init:aWriter newline:aStr];
+    return [[AutoIndentWriter alloc] initWithWriter:aWriter newline:aStr];
 }
 
 - (id) init
@@ -62,12 +62,63 @@
     self = [super init];
     if (self != nil) {
         writer = self;
+        [Misc setNewline:@"\n"];
     }
-    [Misc setNewline:@"\n"];
     return self;
 }
 
-- (id) init:(Writer *)aWriter newline:(NSString *)aNewline
+- (id) initWithCapacity:(NSInteger)sz
+{
+    self=[super initWithCapacity:(NSUInteger)sz];
+    if ( self != nil ) {
+        indents = [AMutableArray arrayWithCapacity:5];
+        anchors = [IntArray newArrayWithLen:10];
+        anchors_sp = -1;
+        atStartOfLine = YES;
+        charPosition = 0;
+        charIndex = 0;
+        lineWidth = ST.NO_WRAP;
+        [indents addObject:@""];
+        newline = @"\n";
+        [Misc setNewline:newline];
+        writer = self;
+        ip = 0;
+    }
+    return self;
+}
+
+- (id) initWithWriter:(Writer *)aWriter
+{
+    self=[super init];
+    if ( self != nil ) {
+        indents = [AMutableArray arrayWithCapacity:5];
+        anchors = [IntArray newArrayWithLen:10];
+        anchors_sp = -1;
+        atStartOfLine = YES;
+        charPosition = 0;
+        charIndex = 0;
+        lineWidth = ST.NO_WRAP;
+        [indents addObject:@""];
+        newline = @"\n";
+        [Misc setNewline:newline];
+        ip = 0;
+        if (aWriter == nil) {
+            writer = self;
+        }
+        else {
+            writer = aWriter;
+/*
+            self.capacity = writer.capacity;
+            self.data = writer.data;
+            self.ptr = writer.ptr;
+            self.ip = writer.ip;
+ */
+        }
+    }
+    return self;
+}
+
+- (id) initWithWriter:(Writer *)aWriter newline:(NSString *)aNewline
 {
     self=[super init];
     if ( self != nil ) {
@@ -94,27 +145,6 @@
             self.ip = writer.ip;
  */
         }
-        newline = aNewline;
-    }
-    return self;
-}
-
-- (id) initWithCapacity:(NSInteger)sz
-{
-    self=[super initWithCapacity:(NSUInteger)sz];
-    if ( self != nil ) {
-        indents = [AMutableArray arrayWithCapacity:5];
-        anchors = [IntArray newArrayWithLen:10];
-        anchors_sp = -1;
-        atStartOfLine = YES;
-        charPosition = 0;
-        charIndex = 0;
-        lineWidth = ST.NO_WRAP;
-        [indents addObject:@""];
-        newline = @"\n";
-        [Misc setNewline:newline];
-        writer = self;
-        ip = 0;
     }
     return self;
 }
@@ -124,8 +154,9 @@
 #ifdef DEBUG_DEALLOC
     NSLog( @"called dealloc in AutoIndentWriter" );
 #endif
-    indents = nil;
     anchors = nil;
+    data = nil;
+    indents = nil;
     newline = nil;
     writer = nil;
     // [super dealloc];
@@ -293,7 +324,8 @@
             [writer writeStr:ind];
         }
     }
-    
+    // [it release];
+    it = nil;
     // If current anchor is beyond current indent width, indent to anchor
     // *after* doing indents (might tabs in there or whatever)
     NSInteger indentWidth = n;

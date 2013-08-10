@@ -88,12 +88,23 @@
     
 }
 
+@property (retain) AMutableArray *indents;
+@property (retain) IntArray *anchors;
+@property (assign) NSInteger anchors_sp;
+@property (retain) NSString *newline;
+@property (assign) BOOL atStartOfLine;
+@property (assign) NSInteger charPosition;
+@property (assign) NSInteger charIndex;
+@property (assign) NSInteger lineWidth;
+@property (retain) Writer *writer;
+
 + (id) newWriter;
 + (id) newWriter:(Writer *)aWriter;
 + (id) newWriter:(Writer *)aWriter newline:(NSString *)aStr;
 
 - (id) initWithCapacity:(NSInteger)sz;
-- (id) init:(Writer *)aWriter newline:(NSString *)newline;
+- (id) initWithWriter:(Writer *)aWriter;
+- (id) initWithWriter:(Writer *)aWriter newline:(NSString *)newline;
 - (id) copyWithZone:(NSZone *)aZone;
 - (void) dealloc;
 - (NSInteger) index;
@@ -107,13 +118,4 @@
 - (NSInteger) writeWrap:(NSString *)wrap;
 - (NSInteger) indent;
 
-@property (retain) AMutableArray *indents;
-@property (retain) IntArray *anchors;
-@property (assign) NSInteger anchors_sp;
-@property (retain) NSString *newline;
-@property (assign) BOOL atStartOfLine;
-@property (assign) NSInteger charPosition;
-@property (assign) NSInteger charIndex;
-@property (assign) NSInteger lineWidth;
-@property (retain) Writer *writer;
 @end

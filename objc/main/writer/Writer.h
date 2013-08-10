@@ -32,7 +32,7 @@
 
 @interface Writer : NSMutableString<STWriter> {
     NSInteger capacity;
-    __strong NSMutableData *data;
+    NSMutableData *data;
     char *ptr;
     NSInteger ip;
     id lock;
@@ -69,7 +69,7 @@
 - (void) getChars:(NSString *)orig offset:(NSInteger)offset srcLen:(NSInteger)sLen dest:(char *)buf dstLen:(NSInteger)dLen;
 
 @property (assign) NSInteger capacity;
-@property (retain) NSMutableData *data;
+@property (copy) NSMutableData *data;
 @property (assign) char *ptr;
 @property (assign) NSInteger ip;
 @property (copy) id lock;
@@ -77,7 +77,7 @@
 @end
 
 @interface BufferedWriter : Writer {
-    __strong Writer *writer;
+    Writer *writer;
     NSInteger nChars;
     NSInteger nextChar;
 }
@@ -87,7 +87,6 @@
 
 - (id) initWithWriter:(Writer *)op;
 - (id) initWithWriter:(Writer *)op len:(NSInteger)sz;
-- (void) dealloc;
 - (void) close;
 - (void) flushBuffer;
 //- (void) newline;
@@ -95,16 +94,14 @@
 //- (void) writeChunk:(char *)cbuf offset:(NSInteger)off len:(NSInteger)len;
 //- (void) writeStr:(NSString *)str offset:(NSInteger)off len:(NSInteger)len;
 
-@property (retain) Writer *writer;
+@property (copy) Writer *writer;
 @property (assign) NSInteger nChars;
 @property (assign) NSInteger nextChar;
 @end
 
 @interface OutputStreamWriter : Writer {
-    __strong NSOutputStream *os;
+    NSOutputStream *os;
 }
-
-@property (retain) NSOutputStream *os;
 
 + (id) newWriter:(NSOutputStream *)anOS;
 + (id) newWriter:(NSOutputStream *)anOS charSet:(NSCharacterSet *)charSet;
@@ -112,7 +109,6 @@
 + (id) newWriter:(NSOutputStream *)anOS charSetName:(NSString *)charSetName;
 
 - (id) init:(NSOutputStream *)anOS charSet:(NSCharacterSet *)charSet encoding:(NSStringEncoding)encoding;
-- (void) dealloc;
 //- (void) write:(char)c;
 //- (void) write:(char *)cbuf offset:(NSInteger)off len:(NSInteger)len;
 //- (void) writeStr:(NSString *)str offset:(NSInteger)off len:(NSInteger)len;
@@ -121,8 +117,8 @@
 
 @interface FileWriter : OutputStreamWriter {
     NSInteger fd;
-    __strong NSFileHandle *fh;
-    __strong NSString *fn;
+    NSFileHandle *fh;
+    NSString *fn;
     BOOL append;
 }
 
@@ -142,8 +138,8 @@
 - (void) close;
 
 @property (assign) NSInteger fd;
-@property (retain) NSFileHandle *fh;
-@property (retain) NSString *fn;
+@property (copy) NSFileHandle *fh;
+@property (copy) NSString *fn;
 @property (assign) BOOL append;
 
 @end

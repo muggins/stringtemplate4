@@ -53,7 +53,7 @@
 
 - (id) initWithWriter:(Writer *)aWriter
 {
-    self=[super init:aWriter newline:@"\n"];
+    self=[super initWithWriter:aWriter newline:@"\n"];
     return self;
 }
 
