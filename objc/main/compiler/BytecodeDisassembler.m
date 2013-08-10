@@ -191,6 +191,7 @@
             addr++;
         }
         // [it release];
+        it = nil;
     }
     return (([buf length] > 0) ? buf : @"strings=<nil>");
 }
@@ -211,6 +212,7 @@
         addr++;
     }
     // [it release];
+    it = nil;
     return (([buf length] > 0) ? buf : @"sourceMap=<nil>");
 }
 

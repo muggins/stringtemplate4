@@ -340,6 +340,8 @@
     [top add:@"arrays" value:a];
     NSString *expected = @"Arrays: int[] a = { 3,9,20,2,1,4,6,32,5,\n                    6,77,888,2,1,6,32,5,\n                    6,77,4,9,20,2,1,4,63,\n                    9,20,2,1,4,6,32,5,6,\n                    77,6,32,5,6,77,3,9,20,\n                    2,1,4,6,32,5,6,77,888,\n                    1,6,32,5 };\nint[] a = { 3,9,20,2,1,4,6,32,5,6,77,888,\n            2,1,6,32,5,6,77,4,9,20,2,1,4,\n            63,9,20,2,1,4,6,32,5,6,77,6,\n            32,5,6,77,3,9,20,2,1,4,6,32,\n            5,6,77,888,1,6,32,5 };\ndone";
     NSString *result = [top renderWithLineWidth:40];
+    NSLog(@"Expected = %@", expected);
+    NSLog(@"Result   = %@", result);
     [self assertEquals:expected result:result];
 }
 

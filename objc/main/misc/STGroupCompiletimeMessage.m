@@ -29,6 +29,9 @@
 
 @implementation STGroupCompiletimeMessage
 
+@synthesize token;
+@synthesize srcName;
+
 + (id) newMessage:(ErrorTypeEnum)anError srcName:(NSString *)aSrcName t:(CommonToken *)t cause:(NSException *)aCause
 {
     return [[STGroupCompiletimeMessage alloc] init:anError srcName:aSrcName t:t cause:aCause arg:nil arg2:nil];
@@ -81,9 +84,7 @@
     if (srcName != nil) {
         return [NSString stringWithFormat:@"%@ %@: %@", srcName, filepos, [NSString stringWithFormat:[ErrorType ErrorNum:error], arg, arg2]];
     }
-    return [NSString stringWithFormat:@"%@: %@", filepos , [NSString stringWithFormat:[ErrorType ErrorNum:error], arg, arg2]];
+    return [NSString stringWithFormat:@"%ld: %@", filepos , [NSString stringWithFormat:[ErrorType ErrorNum:error], arg, arg2]];
 }
 
-@synthesize token;
-@synthesize srcName;
 @end

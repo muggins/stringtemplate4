@@ -446,7 +446,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -480,7 +480,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -514,7 +514,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -548,7 +548,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -582,7 +582,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -616,7 +616,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -650,7 +650,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -684,7 +684,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -718,7 +718,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -752,7 +752,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -786,7 +786,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -820,7 +820,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -854,7 +854,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -888,7 +888,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -922,7 +922,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -956,7 +956,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -990,7 +990,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1024,7 +1024,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1058,7 +1058,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1092,7 +1092,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1126,7 +1126,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1160,7 +1160,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1194,7 +1194,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1228,7 +1228,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1262,7 +1262,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1296,7 +1296,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1330,7 +1330,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1364,7 +1364,7 @@ static const unsigned long long FOLLOW_exprNoComma_in_listElement2901_data[] = {
 
 - (void) dealloc
 {
-    self.tree = nil;
+    tree = nil;
     // [super dealloc];
 }
 
@@ -1617,8 +1617,7 @@ static conditional_Scope *conditional_scope;
 - (void) dealloc
 {
     /* AST genericParser.dealloc */
-    [self setTreeAdaptor:nil];
-
+    treeAdaptor = nil;
     // [super dealloc];
 }
 
@@ -6336,6 +6335,7 @@ static conditional_Scope *conditional_scope;
                 alt35=6;
             }
             else {
+                if ( LA35_1 == EOF || LA35_1 == ID ) [input consume];
                 NoViableAltException *nvae = [NoViableAltException newException:35 state:1 stream:input];
                 nvae.c = LA35_1;
                 @throw nvae;

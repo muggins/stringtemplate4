@@ -810,6 +810,7 @@ id<TreeAdaptor> treeAdaptor;   /* AST parserMemVars */
 
 + (id) newSTParser:(id<TokenStream>)anInput error:(ErrorManager *)anErrMgr token:(CommonToken *)aTemplateToken;
 - (id) init:(id<TokenStream>)anInput error:(ErrorManager *)anErrMgr token:(CommonToken *)aTemplateToken;
+- (void) dealloc;
 - (id) recoverFromMismatchedToken:(id<IntStream>)anInput TokenType:(NSInteger)ttype Follow:(ANTLRBitSet *)follow;
 
 /* ObjC end of actions.(actionScope).methodsDecl */

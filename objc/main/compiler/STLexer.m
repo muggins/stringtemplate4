@@ -236,9 +236,9 @@ delimiterStopChar:(unichar)aStopChar
     NSLog( @"called dealloc in STLexer" );
 #endif
     errMgr = nil;
+    templateToken = nil;
     input = nil;
     tokens = nil;
-    templateToken = nil;
     // [super dealloc];
 }
 

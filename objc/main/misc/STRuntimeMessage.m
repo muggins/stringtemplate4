@@ -84,7 +84,7 @@
 - (void)dealloc
 {
     interp = nil;
-    InstanceScope = nil;
+    scope = nil;
     // [super dealloc];
 }
 

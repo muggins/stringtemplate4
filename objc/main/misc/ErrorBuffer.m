@@ -90,6 +90,8 @@
         m = [it nextObject];
         [buf appendFormat:@"%@%@", [m description], Misc.newline];
     }
+    // [it release];
+    it = nil;
 //    return (([buf length] > 0) ? buf : @"buf=<nil>");
     return (([buf length] > 0) ? buf : @"");
 }

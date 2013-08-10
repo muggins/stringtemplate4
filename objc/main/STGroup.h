@@ -157,7 +157,7 @@
 @property (assign) BOOL iterateAcrossValues;
 
 + (const NSString *) DEFAULT_KEY;
-+ (NSString *) DICT_KEY;
++ (const NSString *) DICT_KEY;
 + (STGroup *) defaultGroup;
 + (void) resetDefaultGroup;
 

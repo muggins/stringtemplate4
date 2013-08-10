@@ -6,13 +6,13 @@
 //  Copyright 2011 Alan's MachineWorks. All rights reserved.
 //
 
-#define STAssertTrue GHAssertTrue
-#define SenTestCase GHTestCase
+// #define STAssertTrue GHAssertTrue
+// #define SenTestCase GHTestCase
 
 #import <Foundation/Foundation.h>
 #import <ANTLR/ANTLR.h>
-//#import <SenTestingKit/SenTestCase.h>
-#import <GHUnit/GHTestCase.h>
+// #import <GHUnit/GHTestCase.h>
+#import <SenTestingKit/SenTestCase.h>
 #import "STGroup.h"
 #import "Compiler.h"
 #import "Misc.h"
@@ -57,7 +57,7 @@ extern NSString *const newline;
 
 @interface BaseTest : SenTestCase {
     NSString *randomDir;
-    // NSString *tmpdir;
+    NSString *tmpdir;
     
     /**
      * reset during setUp and set to true if we find a problem
@@ -71,15 +71,18 @@ extern NSString *const newline;
     NSString *stderrDuringParse;
 }
 
-- (void) writeFile:(NSString *)dir fileName:(NSString *)fileName content:(NSString *)content;
+@property (retain) NSString *randomDir;
+@property (retain) NSString *tmpdir;
 
 - (void) setUp;
+- (void) tearDown;
+- (void) dealloc;
+- (void) writeFile:(NSString *)dir fileName:(NSString *)fileName content:(NSString *)content;
+
 - (void) checkTokens:(NSString *)template expected:(NSString *)expected;
 - (void) checkTokens:(NSString *)template expected:(NSString *)expected delimiterStartChar:(unichar)delimiterStartChar delimiterStopChar:(unichar)delimiterStopChar;
 - (NSString *)getRandomDir;
 - (void) assertEquals:(NSString *)expected result:(NSString *)result;
-
-@property (retain) NSString *randomDir;
 
 @end
 

@@ -40,7 +40,7 @@
 @end
 
 @interface Counter : NSObject {
-  int n;
+  NSInteger n;
 }
 
 - (id) init;

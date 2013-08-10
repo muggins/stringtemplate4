@@ -170,12 +170,12 @@ static BOOL trackCreationEvents = NO;
 }
 */
 
-+ (const NSString * __strong) DEFAULT_KEY
++ (const NSString *) DEFAULT_KEY
 {
     return DEFAULT_KEY;
 }
 
-+ (NSString *) DICT_KEY
++ (const NSString *) DICT_KEY
 {
     return DICT_KEY;
 }
@@ -238,8 +238,10 @@ static BOOL trackCreationEvents = NO;
         importsToClearOnUnload = [AMutableArray arrayWithCapacity:16];
         templates = [LinkedHashMap newLinkedHashMap:16];
         dictionaries = [LinkedHashMap newLinkedHashMap:16];
+        renderers = [LinkedHashMap newLinkedHashMap:5];
         adaptors = [[STGroup_Anon1 newSTGroup_Anon1] getDict];
         typeToAdaptorCache = [LinkedHashMap newLinkedHashMap:16];
+        typeToRendererCache = [LinkedHashMap newLinkedHashMap:16];
         iterateAcrossValues = NO;
         errMgr = ErrorManager.DEFAULT_ERR_MGR;
     }

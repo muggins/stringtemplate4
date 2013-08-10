@@ -135,6 +135,8 @@
             return traceStr;
         }
     }
+    // [it release];
+    it = nil;
     return trace;
 }
 

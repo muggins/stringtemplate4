@@ -32,9 +32,6 @@
 #import "STErrorListener.h"
 #import "ConstructionEvent.h"
 
-#ifndef DEBUG_DEALLOC
-#define DEBUG_DEALLOC
-#endif
 /**
  * <@r()>, <@r>...<@end>, and @t.r() ::= "..." defined manually by coder
  */
@@ -154,6 +151,12 @@ typedef enum {
     __strong STGroup *groupThatCreatedThisInstance;
 }
 
+@property (retain) CompiledST *impl;
+@property (retain) AMutableArray *locals;
+@property (retain) ST *enclosingInstance;
+@property (retain) STGroup *groupThatCreatedThisInstance;
+@property (retain, getter=debugState, setter = setDebugState:) DebugState *debugState;
+
 + (void) initialize;
 
 + (STNoSuchAttributeException *) cachedNoSuchAttrException;
@@ -207,11 +210,5 @@ typedef enum {
 - (BOOL) getIsAnonSubtemplate;
 
 // getters and setters
-
-@property (retain) CompiledST *impl;
-@property (retain) AMutableArray *locals;
-@property (retain) ST *enclosingInstance;
-@property (retain) STGroup *groupThatCreatedThisInstance;
-@property (retain, getter=debugState, setter = setDebugState:) DebugState *debugState;
 
 @end

@@ -35,6 +35,10 @@
 
 @implementation STCompiletimeMessage
 
+@synthesize templateToken;
+@synthesize token;
+@synthesize srcName;
+
 + (id) newMessage:(ErrorTypeEnum)anError srcName:(NSString *)aSrcName templateToken:(CommonToken *)aTemplateToken t:(CommonToken *)t
 {
     return [[STCompiletimeMessage alloc] init:anError srcName:aSrcName templateToken:aTemplateToken t:t cause:nil arg:nil arg2:nil];
@@ -102,7 +106,4 @@
     return [NSString stringWithFormat:@"%@: %@", filepos, result ];
 }
 
-@synthesize templateToken;
-@synthesize token;
-@synthesize srcName;
 @end

@@ -118,18 +118,31 @@ NSString *const newline = @"\n"/* Misc.newline */;
 @implementation BaseTest
 
 @synthesize randomDir;
+@synthesize tmpdir;
 
 - (void)setUp
 {
 //     [super setUp];
     // Set-up code here.
+    [STGroup resetDefaultGroup];
+    tmpdir = @"/tmp";
+    randomDir = @"";
 }
 
 - (void)tearDown
 {
     // Tear-down code here.
-    [STGroup resetDefaultGroup];
 //    [super tearDown];
+}
+
+- (void) dealloc
+{
+#ifdef DEBUG_DEALLOC
+    NSLog( @"called dealloc in BaseTest" );
+#endif
+    randomDir = nil;
+    tmpdir = nil;
+    // [super dealloc];
 }
 
 - (void) writeFile:(NSString *)dir fileName:(NSString *)fileName content:(NSString *)content
@@ -208,7 +221,8 @@ NSString *const newline = @"\n"/* Misc.newline */;
     
     [buf appendString:@"]"];
     NSString *result = [NSString stringWithString:buf];
-    STAssertTrue( [expected isEqualToString:result], @"Expected %@, but got \"%@\"", expected, result );
+    //    STAssertTrue( [expected isEqualToString:result], @"Expected %@, but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
 }
 
 - (NSString *) getRandomDir

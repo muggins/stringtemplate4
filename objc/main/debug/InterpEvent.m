@@ -30,6 +30,10 @@
 
 @implementation InterpEvent
 
+@synthesize scope;
+@synthesize outputStartChar;
+@synthesize outputStopChar;
+
 + (id) newEvent:(InstanceScope *)aScope start:(NSInteger)theStart stop:(NSInteger)theStop
 {
     return [[InterpEvent alloc] init:aScope start:(NSInteger)theStart stop:(NSInteger)theStop];
@@ -66,7 +70,4 @@
     // [super dealloc];
 }
 
-@synthesize scope;
-@synthesize outputStartChar;
-@synthesize outputStopChar;
 @end

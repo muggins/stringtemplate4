@@ -143,9 +143,7 @@
 - (void)setUp
 {
     [super setUp];
-
     // Set-up code here.
-    STGroup.resetDefaultGroup;
 }
 
 - (void)tearDown
@@ -161,7 +159,8 @@
     NSString *expected = @"hi !";
     NSString *result = [st render];
     // [st release];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
 }
 
 - (void) test02Attr
@@ -171,7 +170,8 @@
     [st add:@"name" value:@"Ter"];
     NSString *expected = @"hi Ter!";
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -181,10 +181,11 @@
     ST *st = [ST newSTWithTemplate:template];
     [[[st add:@"names" value:@"Ter"] add:@"names" value:@"Tom"] addInt:@"x" value:1];
     NSLog( @"st.locals = %@", [st.locals description]);
-    NSString * expected = @"1:TerTom!";
-    NSString * result = [st render];
+    NSString *expected = @"1:TerTom!";
+    NSString *result = [st render];
     NSLog( @"st.locals = %@", [st.locals description]);
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -193,9 +194,10 @@
     NSString *aTemplate = @"t() ::= <<hi <name>!>>\n";
     ErrorBuffer *errors = [ErrorBuffer newErrorBuffer];
     [self writeFile:tmpdir fileName:@"t.stg" content:aTemplate];
-    STGroupFile *group = [STGroupFile newSTGroupFile:[tmpdir stringByAppendingPathComponent:@"t.stg"]];
+    STGroupFile *group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]];
     group.errMgr = [ErrorManager newErrorManagerWithListener:errors];
     ST *st = [group getInstanceOf:@"t"];
+    NSString *expected = @"no such attribute: name";
     NSString *result = nil;
     
     @try {
@@ -204,8 +206,8 @@
     @catch (IllegalArgumentException *iae) {
         result = [iae reason];
     }
-    NSString *expected = @"no such attribute: name";
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -217,7 +219,8 @@
     [st add:@"name" value:@"Tom"];
     NSString *expected = @"hi TerTom!";
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -231,7 +234,8 @@
     [st add:@"name" value:@"Sumana"]; // shouldn't alter my version of names list!
     NSString *expected = @"hi TerTomSumana!";  // ST sees 3 names
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     STAssertTrue( (cnt = [names count] == 2), @"Expected [names count] == 2 but got %d)", cnt );
     return;
 }
@@ -245,7 +249,8 @@
     [st add:@"name" value:@"Sumana"]; // shouldn't alter my version of names list!
     NSString *expected = @"hi TerTomSumana!";  // ST sees 3 names
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -256,7 +261,8 @@
     [st add:@"u" value:[User newUser:1 name:@"parrt"]];
     NSString *expected = @"1: parrt";
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -267,7 +273,8 @@
     [st add:@"foo" value:[AMutableDictionary dictionaryWithObject:@"b" forKey:@"a"]];
     NSString *expected = @"b: ";
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -279,7 +286,8 @@
     //[st add:@"foo" value:[AMutableDictionary dictionaryWithObjects:[NSArray arrayWithObjects:@"a", @"c", nil] forKeys:[NSArray arrayWithObjects:@"b", @"d", nil]]];
     NSString * expected = @"ac";
     NSString * result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -292,7 +300,8 @@
     [st add:@"t" value:t];
     NSString *expected = @"Ter";
     NSString *result = [st render];
-    STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    // STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
+    [self assertEquals:expected result:result];
     return;
 }
 
@@ -989,19 +998,19 @@
 {
     ST *st = [ST newSTWithTemplate:@"Foo <\\n><\\n><\\t> bar\n"];
     StringWriter *sw = [StringWriter newWriter];
-    [st write:[[AutoIndentWriter alloc] init:sw newline:@"\n"]]; // force \n as newline
+    [st write:[[AutoIndentWriter alloc] initWithWriter:sw newline:@"\n"]]; // force \n as newline
     NSString *result = [sw description];
     NSString *expected = @"Foo \n\n\t bar\n";     // expect \n in output
     STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
     st = [ST newSTWithTemplate:[NSString stringWithFormat:@"Foo <\\n><\\t> bar%@", newline]];
     sw = [StringWriter newWriter];
-    [st write:[[AutoIndentWriter alloc] init:sw newline:@"\n"]]; // force \n as newline
+    [st write:[[AutoIndentWriter alloc] initWithWriter:sw newline:@"\n"]]; // force \n as newline
     expected = @"Foo \n\t bar\n";     // expect \n in output
     result = [sw description];
     STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
     st = [ST newSTWithTemplate:@"Foo<\\ >bar<\\n>"];
     sw = [StringWriter newWriter];
-    [st write:[[AutoIndentWriter alloc] init:sw newline:@"\n"]]; // force \n as newline
+    [st write:[[AutoIndentWriter alloc] initWithWriter:sw newline:@"\n"]]; // force \n as newline
     result = [sw description];
     expected = @"Foo bar\n"; // forced \n
     STAssertTrue( [expected isEqualTo:result], @"Expected \"%@\" but got \"%@\"", expected, result );
@@ -1087,7 +1096,7 @@
 {
     NSString *aTemplate = @"t() ::= <<  abc>>\nmain() ::= <<\n<t()>\n<(t())>\n  <t()>\n  <(t())>\n>>\n";
     [self writeFile:tmpdir fileName:@"t.stg" content:aTemplate];
-    STGroupFile *group = [STGroupFile newSTGroupFile:[tmpdir stringByAppendingPathComponent:@"t.stg"]];
+    STGroupFile *group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]];
     ST *st = [group getInstanceOf:@"main"];
     StringWriter *sw = [StringWriter newWriter];
     NoIndentWriter *w = [NoIndentWriter newWriter:sw];

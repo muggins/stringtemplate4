@@ -297,7 +297,8 @@
     }
 }
 
-- (void) dealloc {
+- (void) dealloc
+{
     [root release];
     [currentScope release];
     [allEvents release];

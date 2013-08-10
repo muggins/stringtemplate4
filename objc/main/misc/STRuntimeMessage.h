@@ -55,7 +55,7 @@
 + (id) newMessage:(Interpreter *)interp error:(ErrorTypeEnum)anError ip:(NSInteger)anIp who:(ST *)aWho cause:(NSException *)e arg:(id)anArg arg2:(id)anArg2 arg3:(id)anArg3;
 
 - (id) init:(Interpreter *)interp error:(ErrorTypeEnum)anError ip:(NSInteger)anIp who:(ST *)aWho cause:(NSException *)e arg:(id)anArg arg2:(id)anArg2 arg3:(id)anArg3;
-
+- (void)dealloc;
 - (NSString *) getSourceLocation;
 - (NSString *) description;
 

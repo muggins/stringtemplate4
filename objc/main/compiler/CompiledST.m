@@ -189,6 +189,7 @@ static CompiledST *NOT_FOUND_ST = nil;
             [self addArg:a];
         }
         // [it release];
+        it = nil;
     }
 }
 
@@ -216,6 +217,7 @@ static CompiledST *NOT_FOUND_ST = nil;
             [sub defineImplicitlyDefinedTemplates:group];
         }
         // [it release];
+        it = nil;
     }
 }
 

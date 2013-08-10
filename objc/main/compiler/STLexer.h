@@ -92,6 +92,22 @@
     __strong AMutableArray *tokens;
 }
 
+@property (assign) unichar delimiterStartChar;
+@property (assign) unichar delimiterStopChar;
+@property (assign) BOOL scanningInsideExpr;
+@property (assign) NSInteger subtemplateDepth;
+@property (retain) ErrorManager *errMgr;
+@property (retain) CommonToken *templateToken;
+@property (retain) id<CharStream> input;
+@property (assign) unichar c;
+@property (assign) NSInteger startCharIndex;
+@property (assign) NSInteger startLine;
+@property (assign) NSInteger startCharPositionInLine;
+@property (retain) AMutableArray *tokens;
+
+//@property (nonatomic, retain, readonly) NSString *errorHeader;
+//@property (nonatomic, retain, readonly) NSString *sourceName;
+
 + (NSInteger) RCURLY;
 + (NSInteger) LDELIM;
 + (CommonToken *) SKIP;
@@ -114,6 +130,7 @@ delimiterStopChar:(unichar)delimiterStopChar;
 - (id) init:(ErrorManager *)errMgr
       input:(id<CharStream>)input templateToken:(CommonToken *)templateToken
 delimiterStartChar:(unichar)delimiterStartChar delimiterStopChar:(unichar)delimiterStopChar;
+- (void) dealloc;
 
 - (CommonToken *) nextToken;
 - (void) match:(unichar)x;
@@ -141,22 +158,6 @@ delimiterStartChar:(unichar)delimiterStartChar delimiterStopChar:(unichar)delimi
 - (CommonToken *) newToken:(NSInteger)ttype text:(NSString *)text pos:(NSInteger)pos;
 - (id) copyWithZone:(NSZone *)aZone;
 - (NSString *) getSourceName;
-
-@property (assign) unichar delimiterStartChar;
-@property (assign) unichar delimiterStopChar;
-@property (assign) BOOL scanningInsideExpr;
-@property (assign) NSInteger subtemplateDepth;
-@property (retain) ErrorManager *errMgr;
-@property (retain) CommonToken *templateToken;
-@property (retain) id<CharStream> input;
-@property (assign) unichar c;
-@property (assign) NSInteger startCharIndex;
-@property (assign) NSInteger startLine;
-@property (assign) NSInteger startCharPositionInLine;
-@property (retain) AMutableArray *tokens;
-
-//@property (nonatomic, retain, readonly) NSString *errorHeader;
-//@property (nonatomic, retain, readonly) NSString *sourceName;
 
 @end
 

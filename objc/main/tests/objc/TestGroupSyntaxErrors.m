@@ -101,7 +101,7 @@
     STGroup *group = [STGroupFile newSTGroupFile:[NSString stringWithFormat:@"%@/t.stg", tmpdir]];
     [group setListener:errors];
     [group load];
-    NSString *expected = @"t.stg 1:6: mismatched input ')' expecting ID\n";
+    NSString *expected = @"t.stg 1:6: missing ID at ')'\n";
     NSString *result = [errors description];
     [self assertEquals:expected result:result];
 }

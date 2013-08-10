@@ -140,7 +140,7 @@ static ErrorManager *DEFAULT_ERR_MGR;
 
 - (id) init
 {
-    self=[super init];
+    self = [super init];
     if ( self != nil ) {
         listener = DEFAULT_ERROR_LISTENER;
     }
@@ -149,7 +149,7 @@ static ErrorManager *DEFAULT_ERR_MGR;
 
 - (id) initWithListener:(id<STErrorListener>)aListener
 {
-    self=[super init];
+    self = [super init];
     if ( self != nil ) {
         listener = aListener;
     }

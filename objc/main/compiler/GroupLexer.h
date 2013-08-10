@@ -112,6 +112,8 @@
 
 + (void) initialize;
 + (GroupLexer *)newGroupLexerWithCharStream:(id<CharStream>)anInput;
+- (id) initWithCharStream:(id<CharStream>)anInput;
+- (void) dealloc;
 /* ObjC start actions.lexer.methodsDecl */
 
 - (void) reportError:(RecognitionException *)e;
