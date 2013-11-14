@@ -43,6 +43,10 @@
   BOOL alreadyLoaded;
 }
 
+@property (retain) NSString *sourceName;
+@property (retain) NSString *text;
+@property (assign) BOOL alreadyLoaded;
+
 + (id) newSTGroupString:(NSString *)aTemplate;
 + (id) newSTGroupString:(NSString *)aSourceName text:(NSString *)aTemplate;
 + (id) newSTGroupString:(NSString *)aSourceName text:(NSString *)aTemplate delimiterStartChar:(unichar)aStartChar delimiterStopChar:(unichar)aStopChar;
@@ -54,9 +58,5 @@
 - (CompiledST *) load:(NSString *)name;
 - (void) load;
 - (NSString *) getFileName;
-
-@property (copy) NSString *sourceName;
-@property (copy) NSString *text;
-@property (assign) BOOL alreadyLoaded;
 
 @end
